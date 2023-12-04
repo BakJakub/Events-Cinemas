@@ -15,7 +15,7 @@ enum Endpoint {
     func path() -> String {
         switch self {
         case .nowPlaying:
-            return "api/register"
+            return "movie/now_playing"
         case .popular:
             return "movie/popular"
         case .topRated:

@@ -3,69 +3,56 @@
 import Foundation
 import UIKit
 
-struct MovieModel: Decodable {
+struct MovieModel: Codable {
+    let dates: Dates
     let page: Int
-    let results: [MovieDetail]
-    let totalPages: Int
-    let totalResults: Int
-    var additionalData: [String: Any]?
-
-    struct MovieDetail: Decodable {
-        let adult: Bool
-        let backdropPath: String?
-        let genreIDs: [Int]
-        let id: Int
-        let originalLanguage: String
-        let originalTitle: String
-        let overview: String
-        let popularity: Double
-        let posterPath: String?
-        let releaseDate: String
-        let title: String
-        let video: Bool
-        let voteAverage: Double
-        let voteCount: Int
-        var additionalData: [String: Any]?
-
-        enum CodingKeys: String, CodingKey {
-            case adult
-            case backdropPath = "backdrop_path"
-            case genreIDs = "genre_ids"
-            case id
-            case originalLanguage = "original_language"
-            case originalTitle = "original_title"
-            case overview
-            case popularity
-            case posterPath = "poster_path"
-            case releaseDate = "release_date"
-            case title
-            case video
-            case voteAverage = "vote_average"
-            case voteCount = "vote_count"
-        }
-    }
+    let results: [MovieResult]
+    let totalPages, totalResults: Int
 
     enum CodingKeys: String, CodingKey {
-        case page
-        case results
+        case dates, page, results
         case totalPages = "total_pages"
         case totalResults = "total_results"
     }
+}
 
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.page = try container.decode(Int.self, forKey: .page)
-        self.totalPages = try container.decode(Int.self, forKey: .totalPages)
-        self.totalResults = try container.decode(Int.self, forKey: .totalResults)
-        self.results = try container.decode([MovieDetail].self, forKey: .results)
+struct Dates: Codable {
+    let maximum, minimum: String
+}
 
-        var dynamicData = [String: Any]()
-        let dynamicKeysContainer = try decoder.container(keyedBy: DynamicCodingKeys.self)
-        for key in dynamicKeysContainer.allKeys {
-            dynamicData[key.stringValue] = try dynamicKeysContainer.decode(AnyDecodable.self, forKey: key).value
-        }
-        self.additionalData = dynamicData.isEmpty ? nil : dynamicData
+struct MovieResult: Codable {
+    let adult: Bool
+    let backdropPath: String
+    let genreIDS: [Int]
+    let id: Int
+    let originalLanguage: OriginalLanguage
+    let originalTitle, overview: String
+    let popularity: Double
+    let posterPath, releaseDate, title: String
+    let video: Bool
+    let voteAverage: Double
+    let voteCount: Int
+
+    enum CodingKeys: String, CodingKey {
+        case adult
+        case backdropPath = "backdrop_path"
+        case genreIDS = "genre_ids"
+        case id
+        case originalLanguage = "original_language"
+        case originalTitle = "original_title"
+        case overview, popularity
+        case posterPath = "poster_path"
+        case releaseDate = "release_date"
+        case title, video
+        case voteAverage = "vote_average"
+        case voteCount = "vote_count"
     }
+}
+
+enum OriginalLanguage: String, Codable {
+    case en = "en"
+    case ja = "ja"
+    case uk = "uk"
 }
 
 struct AnyDecodable: Decodable {
