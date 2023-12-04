@@ -10,11 +10,11 @@ class EventCinemasController: UIViewController {
     private var searchControllerManager = SearchControllerManager()
     
     private var searchController: UISearchController = {
-         let searchController = UISearchController(searchResultsController: nil)
-         searchController.obscuresBackgroundDuringPresentation = false
-         searchController.definesPresentationContext = true
-         return searchController
-     }()
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.definesPresentationContext = true
+        return searchController
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +25,11 @@ class EventCinemasController: UIViewController {
     }
     
     private func configureCollectionView() {
+        collectionView = EventCinemasViewBuilder.buildCollectionView()
+        setupCollectionViewConstraints()
+    }
+    
+    private func setupCollectionViewConstraints() {
         collectionView = EventCinemasViewBuilder.buildCollectionView()
         collectionView.backgroundColor = .white
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -40,11 +45,8 @@ class EventCinemasController: UIViewController {
     private func setupSearchController() {
         searchControllerManager.delegate = self
         searchControllerManager.setupSearchController(with: searchController.searchBar)
-   
         navigationItem.searchController = searchController
-        definesPresentationContext = true
     }
-    
     
     private func setupViewModel() {
         viewModel.delegate = self
@@ -53,6 +55,7 @@ class EventCinemasController: UIViewController {
     
     private func setupCollectionViewManager() {
         collectionViewManager = CollectionViewManager(viewModel: viewModel)
+        collectionViewManager.navigationController = navigationController
         setupCollectionViewDelegate()
         setupCollectionViewDataSource()
     }
@@ -60,19 +63,29 @@ class EventCinemasController: UIViewController {
     private func setupCollectionViewDelegate() {
         collectionView.delegate = collectionViewManager
     }
-
+    
     private func setupCollectionViewDataSource() {
         collectionView.dataSource = collectionViewManager
     }
 }
 
-extension EventCinemasController: SearchControllerManagerDelegate {
-    func didChangeSearchText(_ searchText: String) {
-        viewModel.updateSearchText(searchText)
-        viewModel.searchCategoriesAndUpdate()
+extension EventCinemasController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        view.endEditing(true)
     }
 }
 
+extension EventCinemasController: SearchControllerManagerDelegate {
+        
+    func didChangeSearchText(_ searchText: String) {
+        viewModel.updateSearchText(searchText)
+        viewModel.searchCategoriesAndUpdate()
+        
+        if !searchText.isEmpty {
+            searchController.searchBar.becomeFirstResponder()
+        }
+    }
+}
 
 extension EventCinemasController: EventsViewModelDelegate {
     func filteredCategoriesUpdated(categories: [EventsCinemaModel]) {

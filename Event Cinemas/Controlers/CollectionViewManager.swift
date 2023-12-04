@@ -3,6 +3,8 @@
 import UIKit
 
 class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    weak var navigationController: UINavigationController?
     private var viewModel: EventsViewModel
     
     init(viewModel: EventsViewModel) {
@@ -29,5 +31,23 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
         let cellWidth = collectionView.bounds.width - 20
         let cellHeight: CGFloat = 100
         return CGSize(width: cellWidth, height: cellHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedCategory = viewModel.getFilteredCategory(at: indexPath.item) ?? viewModel.categories[indexPath.item]
+        
+        let detailsVC = DetailsViewController()
+        detailsVC.category = selectedCategory
+
+        navigationController?.pushViewController(detailsVC, animated: true)
+    }
+}
+
+class DetailsViewController: UIViewController {
+    var category: EventsCinemaModel?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Implement UI setup using category data
     }
 }
