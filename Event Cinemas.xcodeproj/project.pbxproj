@@ -99,6 +99,8 @@
 		8C6DDB532B1DE85F00A02D0A /* Event Cinemas */ = {
 			isa = PBXGroup;
 			children = (
+				8C6DDB542B1DE85F00A02D0A /* AppDelegate.swift */,
+				8C6DDB562B1DE85F00A02D0A /* SceneDelegate.swift */,
 				8C89405C2B1DF1640025B797 /* Controlers */,
 				8C89405A2B1DF0F30025B797 /* Coordinators */,
 				8C8940572B1DF0CD0025B797 /* Models */,
@@ -158,8 +160,6 @@
 		8C89405B2B1DF0FE0025B797 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8C6DDB542B1DE85F00A02D0A /* AppDelegate.swift */,
-				8C6DDB562B1DE85F00A02D0A /* SceneDelegate.swift */,
 				8C6DDB622B1DE86000A02D0A /* Info.plist */,
 				8C6DDB5D2B1DE86000A02D0A /* Assets.xcassets */,
 				8C6DDB5F2B1DE86000A02D0A /* LaunchScreen.storyboard */,
