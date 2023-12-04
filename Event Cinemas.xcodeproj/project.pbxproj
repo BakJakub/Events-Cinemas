@@ -20,6 +20,8 @@
 		8C8940692B1DFDEF0025B797 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8940682B1DFDEF0025B797 /* AppDelegate.swift */; };
 		8C89406B2B1E00B20025B797 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C89406A2B1E00B20025B797 /* SceneDelegate.swift */; };
 		8C89406D2B1E03A40025B797 /* EventCinemasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C89406C2B1E03A40025B797 /* EventCinemasView.swift */; };
+		8C8940702B1E369B0025B797 /* SearchControllerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C89406F2B1E369B0025B797 /* SearchControllerManager.swift */; };
+		8C8940722B1E36C80025B797 /* CollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8940712B1E36C80025B797 /* CollectionViewManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +59,8 @@
 		8C8940682B1DFDEF0025B797 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8C89406A2B1E00B20025B797 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		8C89406C2B1E03A40025B797 /* EventCinemasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCinemasView.swift; sourceTree = "<group>"; };
+		8C89406F2B1E369B0025B797 /* SearchControllerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchControllerManager.swift; sourceTree = "<group>"; };
+		8C8940712B1E36C80025B797 /* CollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,6 +186,8 @@
 			isa = PBXGroup;
 			children = (
 				8C89405D2B1DF73E0025B797 /* EventCinemasController.swift */,
+				8C8940712B1E36C80025B797 /* CollectionViewManager.swift */,
+				8C89406F2B1E369B0025B797 /* SearchControllerManager.swift */,
 			);
 			path = Controlers;
 			sourceTree = "<group>";
@@ -329,6 +335,8 @@
 				8C89406B2B1E00B20025B797 /* SceneDelegate.swift in Sources */,
 				8C8940672B1DFB980025B797 /* EventsCellViewModel.swift in Sources */,
 				8C8940612B1DFAAC0025B797 /* EventsViewModel.swift in Sources */,
+				8C8940722B1E36C80025B797 /* CollectionViewManager.swift in Sources */,
+				8C8940702B1E369B0025B797 /* SearchControllerManager.swift in Sources */,
 				8C8940692B1DFDEF0025B797 /* AppDelegate.swift in Sources */,
 				8C8940632B1DFAFB0025B797 /* EventCinemaModel.swift in Sources */,
 				8C89406D2B1E03A40025B797 /* EventCinemasView.swift in Sources */,
