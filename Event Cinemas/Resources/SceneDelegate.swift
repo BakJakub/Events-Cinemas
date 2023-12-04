@@ -1,9 +1,4 @@
-//
-//  SceneDelegate.swift
-//  Event Cinemas
-//
-//  Created by Jakub Bak on 04/12/2023.
-//
+//Copyright (c) 2023 Jakub Bąk. All rights reserved.
 
 import UIKit
 
