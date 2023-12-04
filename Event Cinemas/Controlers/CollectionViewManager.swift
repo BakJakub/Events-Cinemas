@@ -36,18 +36,10 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedCategory = viewModel.getFilteredCategory(at: indexPath.item) ?? viewModel.categories[indexPath.item]
         
-        let detailsVC = DetailsViewController()
-        detailsVC.category = selectedCategory
+        let detailsVC = MovieDetailViewController()
+        //detailsVC.category = selectedCategory
 
         navigationController?.pushViewController(detailsVC, animated: true)
     }
 }
 
-class DetailsViewController: UIViewController {
-    var category: EventsCinemaModel?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Implement UI setup using category data
-    }
-}
