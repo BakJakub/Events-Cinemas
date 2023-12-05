@@ -4,41 +4,37 @@ import UIKit
 
 class MovieDetailViewModel {
     
-    var data: MovieDetailResultModel
-    private let movieManager: MovieManagerApiRequest
     var isLoading = false
+    private(set) var data: MovieDetailResultModel
+    private let movieManager: MovieManagerApiRequest
     
     init(data: MovieDetailResultModel, movieManager: MovieManagerApiRequest = MovieManagerApiRequest()) {
         self.data = data
         self.movieManager = movieManager
-        self.fetchMovies(movieId: data.id) { result in
-            
-        }
+        self.fetchMovies(movieId: data.id) {_ in}
     }
     
     func fetchDetailMovies(movieId: Int, completion: @escaping (Bool) -> Void) {
-        guard !isLoading else { return }
-        isLoading = true
-        
-        fetchMovies(movieId: movieId) { [weak self] result in
-            defer { self?.isLoading = false }
-            switch result {
-            case .success(let movies):
-                if let unwrappedMovie = movies.first {
-                    self?.data = unwrappedMovie
-                    completion(true)
-                } else {
-                    completion(false)
-                }
-                
-            case .serverError(_):
-                completion(false)
-                
-            case .networkError(_):
-                completion(false)
-            }
-        }
-    }
+          guard !isLoading else { return }
+          isLoading = true
+          
+          fetchMovies(movieId: movieId) { [weak self] result in
+              defer { self?.isLoading = false }
+              
+              switch result {
+              case .success(let movies):
+                  if let firstMovie = movies.first {
+                      self?.data = firstMovie
+                      completion(true)
+                  } else {
+                      completion(false)
+                  }
+                  
+              case .serverError(_), .networkError(_):
+                  completion(false)
+              }
+          }
+      }
     
     
     func fetchMovies(movieId: Int, completion: @escaping (Result<[MovieDetailResultModel]>) -> Void) {

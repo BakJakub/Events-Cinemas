@@ -1,7 +1,6 @@
 //Copyright (c) 2023 Jakub Bąk. All rights reserved.
 
 import Foundation
-import UIKit
 
 struct APIClient {
     
@@ -29,12 +28,7 @@ struct APIClient {
             URLQueryItem(name: "language", value: "en-US"),
             URLQueryItem(name: "page", value: "\(page)")
         ]
-        
-        guard let url = urlComponents?.url else {
-            completion(.networkError("Invalid URL"))
-            return
-        }
-        
+
         for (key, value) in additionalParams {
             queryItems.append(URLQueryItem(name: key, value: value))
         }

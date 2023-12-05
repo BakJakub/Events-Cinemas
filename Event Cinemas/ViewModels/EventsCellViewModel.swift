@@ -11,11 +11,10 @@ protocol EventsCellViewModelProtocol {
 class EventsCellViewModel: EventsCellViewModelProtocol {
     
     let name: String
-    var isFavorite: Bool
+    var isFavorite: Bool = false
 
     init(category: MovieDetailResultModel) {
         self.name = category.title
-        self.isFavorite = false
     }
 
     func toggleFavorite() {

@@ -47,7 +47,7 @@ class AutocompleteViewController: UITableViewController, AutocompleteViewModelDe
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.didSelectRow(at: indexPath.row)
+        //viewModel.didSelectRow(at: indexPath.row)
     }
     
     private func setupView() {

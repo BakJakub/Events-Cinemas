@@ -1,9 +1,8 @@
 //Copyright (c) 2023 Jakub Bąk. All rights reserved.
 
-import Foundation
 import UIKit
 
-class EventCinemasViewBuilder {
+struct EventCinemasViewBuilder {
     static func buildCollectionView() -> UICollectionView {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
