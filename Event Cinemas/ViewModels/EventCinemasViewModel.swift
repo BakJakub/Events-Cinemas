@@ -51,13 +51,15 @@ class EventCinemasViewModel {
     
     func searchCategories(for query: String) -> [MovieDetailResultModel] {
         let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        return categories.filter { $0.title.range(of: trimmedQuery, options: .caseInsensitive) != nil }
+        return filteredCategories.filter { $0.title.range(of: trimmedQuery, options: .caseInsensitive) != nil }
     }
     
     func searchCategoriesAndUpdate() {
         let filtered = searchCategories(for: currentSearchText)
         filteredCategories = filtered
         delegate?.filteredCategoriesUpdated(categories: filteredCategories)
+
+        fetchSearchMovies(searchText: currentSearchText)
     }
     
     func toggleFavoriteStatus(at index: Int) {
@@ -80,6 +82,38 @@ class EventCinemasViewModel {
         return favoriteMovies.contains(category.title)
     }
     
+    func fetchSearchMovies(searchText: String) {
+        guard !isFetching else { return }
+        isFetching = true
+        
+        if searchText.count < 3 || searchText.isEmpty {
+            filteredCategories = categories.filter { $0.title.range(of: searchText, options: .caseInsensitive) != nil }
+            delegate?.filteredCategoriesUpdated(categories: filteredCategories)
+            isFetching = false
+            return
+        }
+        
+        currentPage += 1
+        
+        searchMovies(page: currentPage, searchText: searchText) { [weak self] result in
+            self?.isFetching = false
+            switch result {
+            case .success(let movies):
+                if let movieResults = movies.first?.results {
+                    if self?.currentPage == 1 {
+                        self?.filteredCategories = movieResults
+                    } else {
+                        self?.filteredCategories.append(contentsOf: movieResults)
+                    }
+                    self?.delegate?.filteredCategoriesUpdated(categories: self?.filteredCategories ?? [])
+                }
+            case .serverError(_), .networkError(_):
+                break
+            }
+        }
+    }
+    
+    
     func fetchNextPage() {
         guard !isFetching else { return }
         isFetching = true
@@ -101,7 +135,21 @@ class EventCinemasViewModel {
     }
     
     func fetchMovies(page: Int, completion: @escaping (Result<[MovieResultModel]>) -> Void) {
-        movieManager.fetchNowPlayingMovies(page: page) { [weak self]  response in
+        movieManager.fetchNowPlayingMovies(page: page) { response in
+            switch response {
+            case .success(let data):
+                completion(.success([data]))
+            case .serverError(let serverError):
+                completion(.serverError(serverError))
+            case .networkError(let networkErrorMessage):
+                completion(.networkError(networkErrorMessage))
+            }
+        }
+    }
+    
+    
+    func searchMovies(page: Int, searchText: String, completion: @escaping (Result<[MovieResultModel]>)-> Void) {
+        movieManager.fetchSearchMovies(page: page, searchText: searchText) {  response in
             switch response {
             case .success(let data):
                 completion(.success([data]))

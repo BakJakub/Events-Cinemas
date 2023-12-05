@@ -10,7 +10,7 @@ class EventCinemasController: UIViewController, AutocompleteViewControllerDelega
     private var collectionViewManager: CollectionViewManager!
     private var searchControllerManager = SearchControllerManager()
     private var autocompleteViewController = AutocompleteViewController()
-
+    
     private var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.obscuresBackgroundDuringPresentation = false
@@ -92,7 +92,7 @@ extension EventCinemasController: UIPopoverPresentationControllerDelegate {
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
     }
-
+    
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         view.isUserInteractionEnabled = true
     }
@@ -109,18 +109,20 @@ extension EventCinemasController: SearchControllerManagerDelegate, SearchBarText
     
     
     func didChangeSearchText(_ searchText: String) {
-        //        viewModel.updateSearchText(searchText)
-        //        viewModel.searchCategoriesAndUpdate()
+        if searchText.count > 2 {
+            viewModel.updateSearchText(searchText)
+            viewModel.searchCategoriesAndUpdate()
+        }
     }
     
     
     func didChangeSearchTextValue(_ searchText: String) {
         autocompleteViewController.autocompleteResults = ["Result 1", "Result 2", "Result 3"]
-
+        
         let navController = UINavigationController(rootViewController: autocompleteViewController)
         navController.modalPresentationStyle = .popover
         navController.preferredContentSize = CGSize(width: view.bounds.width, height: 200)
-
+        
         if let popoverController = navController.popoverPresentationController {
             popoverController.sourceView = view
             popoverController.sourceRect = CGRect(x: view.bounds.midX, y: searchController.searchBar.bounds.height + 100, width: 0, height: 0)
@@ -130,7 +132,7 @@ extension EventCinemasController: SearchControllerManagerDelegate, SearchBarText
             popoverController.permittedArrowDirections = .up
             popoverController.passthroughViews = [searchController.searchBar]
         }
-
+        
         present(navController, animated: true) {
             self.view.isUserInteractionEnabled = false
             self.searchController.searchBar.isUserInteractionEnabled = true
@@ -162,8 +164,14 @@ extension EventCinemasController: UICollectionViewDataSourcePrefetching {
         
         guard numberOfItems > 0 else { return }
         
-        if let lastIndexPath = indexPaths.last, lastIndexPath.item >= numberOfItems - threshold && !viewModel.isFetching {
-            viewModel.fetchNextPage()
+        if viewModel.isFiltering {
+            if let lastIndexPath = indexPaths.last, lastIndexPath.item >= numberOfItems - threshold && !viewModel.isFetching {
+                viewModel.searchCategoriesAndUpdate()
+            }
+        } else {
+            if let lastIndexPath = indexPaths.last, lastIndexPath.item >= numberOfItems - threshold && !viewModel.isFetching {
+                viewModel.fetchNextPage()
+            }
         }
     }
 }

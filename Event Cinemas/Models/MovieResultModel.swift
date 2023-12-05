@@ -4,15 +4,23 @@ import Foundation
 import UIKit
 
 struct MovieResultModel: Codable {
-    let dates: Dates
+    
     let page: Int
     let results: [MovieDetailResultModel]
-    let totalPages, totalResults: Int
-
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.page = try container.decode(Int.self, forKey: .page)
+        
+        if let resultsArray = try? container.decode([MovieDetailResultModel].self, forKey: .results) {
+            self.results = resultsArray
+        } else {
+            self.results = []
+        }
+    }
+    
     enum CodingKeys: String, CodingKey {
-        case dates, page, results
-        case totalPages = "total_pages"
-        case totalResults = "total_results"
+        case page, results
     }
 }
 
@@ -23,13 +31,13 @@ struct Dates: Codable {
 struct MovieDetailResultModel: Codable {
     let id: Int
     let title: String
-
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(Int.self, forKey: .id)
         self.title = try container.decode(String.self, forKey: .title)
     }
-
+    
     enum CodingKeys: String, CodingKey {
         case id, title
     }
@@ -38,7 +46,7 @@ struct MovieDetailResultModel: Codable {
 
 struct AnyDecodable: Decodable {
     let value: Any
-
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let intValue = try? container.decode(Int.self) {
@@ -58,11 +66,11 @@ struct AnyDecodable: Decodable {
 struct DynamicCodingKeys: CodingKey {
     var stringValue: String
     var intValue: Int?
-
+    
     init?(stringValue: String) {
         self.stringValue = stringValue
     }
-
+    
     init?(intValue: Int) {
         return nil
     }
