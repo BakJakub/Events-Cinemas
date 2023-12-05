@@ -5,7 +5,7 @@ import UIKit
 class MovieDetailViewController: UIViewController {
     
     var movieId: Int?
-    private var movie: MovieModel?
+    private var movie: MovieResultModel?
     
     private let loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)

@@ -4,7 +4,8 @@ import UIKit
 
 class EventCinemasController: UIViewController {
     
-    private var viewModel = EventsViewModel()
+    private var isFetching = false
+    private var viewModel = EventCinemasViewModel()
     private var collectionView: UICollectionView!
     private var collectionViewManager: CollectionViewManager!
     private var searchControllerManager = SearchControllerManager()
@@ -22,6 +23,7 @@ class EventCinemasController: UIViewController {
         setupSearchController()
         setupViewModel()
         setupCollectionViewManager()
+        setupCollectionViewPagination()
     }
     
     private func configureCollectionView() {
@@ -60,6 +62,12 @@ class EventCinemasController: UIViewController {
         setupCollectionViewDataSource()
     }
     
+    private func setupCollectionViewPagination() {
+        let collectionViewFlowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        collectionViewFlowLayout?.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
+        collectionView.prefetchDataSource = self
+    }
+    
     private func setupCollectionViewDelegate() {
         collectionView.delegate = collectionViewManager
     }
@@ -87,14 +95,31 @@ extension EventCinemasController: SearchControllerManagerDelegate {
     }
 }
 
-extension EventCinemasController: EventsViewModelDelegate {
-    func filteredCategoriesUpdated(categories: [EventsCinemaModel]) {
-        collectionView.reloadData()
+extension EventCinemasController: EventCinemasDelegate {
+    
+    func filteredCategoriesUpdated(categories: [MovieDetailResultModel]) {
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
     }
     
     func categoriesFetched() {
-        DispatchQueue.main.async { [weak self] in
-            self?.collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+    }
+}
+
+extension EventCinemasController: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        
+        let threshold = 5
+        let numberOfItems = viewModel.isFiltering ? viewModel.filteredCategories.count : viewModel.categories.count
+        
+        guard numberOfItems > 0 else { return }
+
+        if let lastIndexPath = indexPaths.last, lastIndexPath.item >= numberOfItems - threshold && !viewModel.isFetching {
+            viewModel.fetchNextPage()
         }
     }
 }

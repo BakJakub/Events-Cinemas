@@ -5,9 +5,9 @@ import UIKit
 class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     weak var navigationController: UINavigationController?
-    private var viewModel: EventsViewModel
+    private var viewModel: EventCinemasViewModel
     
-    init(viewModel: EventsViewModel) {
+    init(viewModel: EventCinemasViewModel) {
         self.viewModel = viewModel
         super.init()
     }

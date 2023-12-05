@@ -22,7 +22,6 @@ class EventsCollectionViewCell: UICollectionViewCell {
     }
     
     private func configure(with viewModel: EventsCellViewModelProtocol) {
-        categoryImageView.image = UIImage(named: viewModel.background)
         nameLabel.text = viewModel.name
         favoriteButton.isSelected = viewModel.isFavorite
     }
@@ -65,7 +64,7 @@ class EventsCollectionViewCell: UICollectionViewCell {
 
     private func configure() {
         guard let viewModel = viewModel else { return }
-        categoryImageView.image = UIImage(named: viewModel.background)
+        //categoryImageView.image = UIImage(named: viewModel.background)
         nameLabel.text = viewModel.name
     }
 
