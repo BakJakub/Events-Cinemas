@@ -9,13 +9,13 @@ protocol EventCinemasDelegate: AnyObject {
 
 class EventCinemasViewModel {
     
+    var categories: [MovieDetailResultModel] = []
     weak var delegate: EventCinemasDelegate?
     private let movieManager: MovieManager
     private let favoriteKey = "FavoriteMovies"
+    private var currentPage = 0
+    var isFetching = false
     
-    //var categories: [EventsCinemaModel] = []
-    var categories: [MovieDetailResultModel] = []
-
     var filteredCategories: [MovieDetailResultModel] = []
     
     
@@ -34,17 +34,10 @@ class EventCinemasViewModel {
     }
     
     func fetchCategories() {
-//        categories = [
-//            EventsCinemaModel(id: 1, name: "Apartments", background: "apartments-category"),
-//            EventsCinemaModel(id: 2, name: "Houses", background: "home-category"),
-//            EventsCinemaModel(id: 3, name: "Houses2", background: "home-category2"),
-//        ]
-        
-        fetchNowPlayingMovies(page: 1) { res in
-            
-        }
-        //fetchMovies()
-        delegate?.categoriesFetched()
+        fetchNextPage()
+//        fetchMovies(page: currentPage) { _ in
+//            self.delegate?.categoriesFetched()
+//        }
     }
     
     func getFilteredCategory(at index: Int) -> MovieDetailResultModel? {
@@ -90,21 +83,58 @@ class EventCinemasViewModel {
         return favoriteMovies.contains(category.title)
     }
     
-
-    func fetchNowPlayingMovies(page: Int, completion: @escaping (Result<[MovieResultModel]>) -> Void) {
-        movieManager.fetchNowPlayingMovies(page: page) { [weak self] result in
+    func fetchNextPage() {
+        guard !isFetching else { return }
+        isFetching = true
+        
+        currentPage += 1
+        fetchMovies(page: currentPage) { [weak self] result in
+            self?.isFetching = false
             switch result {
             case .success(let movies):
-                self?.categories = movies.results
+                if let movieResults = movies.first?.results {
+                    self?.categories.append(contentsOf: movieResults)
+                    self?.delegate?.categoriesFetched()
+                }
                 self?.delegate?.categoriesFetched()
-                //completion(.success(movies))
-          
-            case .serverError(_): break
-                
-                
-            case .networkError(_): break
-                
+            case .serverError(_), .networkError(_):
+                break
             }
         }
     }
+    
+    func fetchMovies(page: Int, completion: @escaping (Result<[MovieResultModel]>) -> Void) {
+        movieManager.fetchNowPlayingMovies(page: page) { [weak self]  response in
+            switch response {
+            case .success(let data):
+//                self?.categories = data.results
+//                self?.delegate?.categoriesFetched()
+                completion(.success([data]))
+            case .serverError(let serverError):
+                completion(.serverError(serverError))
+            case .networkError(let networkErrorMessage):
+                completion(.networkError(networkErrorMessage))
+            }
+        }
+    }
+    
+    
+    //    func fetchMovies(page: Int, completion: @escaping (Result<[MovieResultModel]>) -> Void) {
+    //        guard !isFetching else { return }
+    //        isFetching = true
+    //        currentPage += 1
+    //
+    //        movieManager.fetchNowPlayingMovies(page: page) { [weak self]  response in
+    //            switch response {
+    //            case .success(let data):
+    //                self?.categories = data.results
+    //                self?.delegate?.categoriesFetched()
+    //                completion(.success([data]))
+    //            case .serverError(let serverError):
+    //                completion(.serverError(serverError))
+    //            case .networkError(let networkErrorMessage):
+    //                completion(.networkError(networkErrorMessage))
+    //            }
+    //        }
+    //    }
 }

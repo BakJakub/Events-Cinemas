@@ -4,6 +4,7 @@ import UIKit
 
 class EventCinemasController: UIViewController {
     
+    private var isFetching = false
     private var viewModel = EventCinemasViewModel()
     private var collectionView: UICollectionView!
     private var collectionViewManager: CollectionViewManager!
@@ -22,6 +23,7 @@ class EventCinemasController: UIViewController {
         setupSearchController()
         setupViewModel()
         setupCollectionViewManager()
+        setupCollectionViewPagination()
     }
     
     private func configureCollectionView() {
@@ -60,6 +62,12 @@ class EventCinemasController: UIViewController {
         setupCollectionViewDataSource()
     }
     
+    private func setupCollectionViewPagination() {
+        let collectionViewFlowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        collectionViewFlowLayout?.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
+        collectionView.prefetchDataSource = self
+    }
+    
     private func setupCollectionViewDelegate() {
         collectionView.delegate = collectionViewManager
     }
@@ -88,13 +96,28 @@ extension EventCinemasController: SearchControllerManagerDelegate {
 }
 
 extension EventCinemasController: EventCinemasDelegate {
+    
     func filteredCategoriesUpdated(categories: [MovieDetailResultModel]) {
-        collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
     }
     
     func categoriesFetched() {
-        DispatchQueue.main.async { [weak self] in
-            self?.collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+    }
+}
+
+extension EventCinemasController: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        let visibleIndexPaths = collectionView.indexPathsForVisibleItems
+        let lastIndexPath = visibleIndexPaths.last ?? IndexPath(row: 0, section: 0)
+        let threshold = 5
+        
+        if indexPaths.contains(where: { $0.item >= lastIndexPath.item - threshold }) && !isFetching {
+            viewModel.fetchNextPage()
         }
     }
 }
