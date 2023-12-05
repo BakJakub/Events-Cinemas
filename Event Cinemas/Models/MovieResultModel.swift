@@ -3,10 +3,10 @@
 import Foundation
 import UIKit
 
-struct MovieModel: Codable {
+struct MovieResultModel: Codable {
     let dates: Dates
     let page: Int
-    let results: [MovieResult]
+    let results: [MovieDetailResultModel]
     let totalPages, totalResults: Int
 
     enum CodingKeys: String, CodingKey {
@@ -20,7 +20,7 @@ struct Dates: Codable {
     let maximum, minimum: String
 }
 
-struct MovieResult: Codable {
+struct MovieDetailResultModel: Codable {
     let adult: Bool
     let backdropPath: String
     let genreIDS: [Int]

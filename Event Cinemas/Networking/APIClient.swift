@@ -26,6 +26,8 @@ struct APIClient {
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YmM3NDc2ZThmZjk5ZjA1OTRhOGU3ZGEyOWUzZWU3ZSIsInN1YiI6IjY1NmRhZWE0ODg2MzQ4MDBjOWUyMjA2NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.V29W4RvpwbJ0UZh2d2OBshXzRsSJ70q22KDwXP7PLv4", forHTTPHeaderField: "Authorization")
+        print(request)
+        print(request.allHTTPHeaderFields)
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             
@@ -65,16 +67,10 @@ struct MovieManager {
         self.apiClient = apiClient
     }
     
-    func fetchNowPlayingMovies(page: Int, completion: @escaping (Result<[MovieModel]>) -> Void) {
-        apiClient.fetchData(from: .nowPlaying, decodingType: [MovieModel].self, page: page) { result in
+    func fetchNowPlayingMovies(page: Int, completion: @escaping (Result<MovieResultModel>) -> Void) {
+        apiClient.fetchData(from: .nowPlaying, decodingType: MovieResultModel.self, page: page) { result in
             completion(result)
         }
     }
-    
-//    func fetchMovieDetails(movieId: Int, completion: @escaping (Result<MovieModel>) -> Void) {
-//        apiClient.fetchData(from: .movieDetails(movieId: movieId), decodingType: MovieModel.MovieDetail.self) { result in
-//            completion(result)
-//        }
-//    }
 }
 
