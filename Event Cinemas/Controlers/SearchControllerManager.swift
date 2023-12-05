@@ -27,8 +27,8 @@ class SearchControllerManager: NSObject, UISearchBarDelegate {
         delegate?.didChangeSearchText(searchText)
         
         let results = ""
-        autocompleteViewController?.autocompleteResults = [results]
-        autocompleteViewController?.tableView.reloadData()
+//        autocompleteViewController?.autocompleteResults = [results]
+//        autocompleteViewController?.tableView.reloadData()
     }
     
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {

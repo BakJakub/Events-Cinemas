@@ -10,11 +10,16 @@ protocol AutocompleteViewControllerDelegate: AnyObject {
 class AutocompleteViewController: UITableViewController {
     
     weak var delegate: AutocompleteViewControllerDelegate?
-    var autocompleteResults: [String] = []
+    
+    var autocompleteResults: [MovieDetailResultModel] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .red
+        self.view.backgroundColor = .white
         navigationController?.isNavigationBarHidden = true
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
     }
@@ -25,12 +30,12 @@ class AutocompleteViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = autocompleteResults[indexPath.row]
+        cell.textLabel?.text = autocompleteResults[indexPath.row].title
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedResult = autocompleteResults[indexPath.row]
-        delegate?.didSelectAutocompleteResult(selectedResult)
+        //delegate?.didSelectAutocompleteResult(selectedResult)
     }
 }

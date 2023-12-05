@@ -103,21 +103,17 @@ extension EventCinemasController: SearchControllerManagerDelegate, SearchBarText
     
     func didSelectAutocompleteResult(_ result: String) {
         searchController.searchBar.text = result
-        //viewModel.updateSearchText(result)
-        //viewModel.searchCategoriesAndUpdate()
     }
     
     
     func didChangeSearchText(_ searchText: String) {
         if searchText.count > 2 {
-            viewModel.updateSearchText(searchText)
-            viewModel.searchCategoriesAndUpdate()
+            self.viewModel.currentSearchText = searchText
         }
     }
     
-    
     func didChangeSearchTextValue(_ searchText: String) {
-        autocompleteViewController.autocompleteResults = ["Result 1", "Result 2", "Result 3"]
+       
         
         let navController = UINavigationController(rootViewController: autocompleteViewController)
         navController.modalPresentationStyle = .popover
@@ -144,7 +140,7 @@ extension EventCinemasController: EventCinemasDelegate {
     
     func filteredCategoriesUpdated(categories: [MovieDetailResultModel]) {
         DispatchQueue.main.async {
-            self.collectionView.reloadData()
+            self.autocompleteViewController.autocompleteResults = self.viewModel.filteredCategories
         }
     }
     
