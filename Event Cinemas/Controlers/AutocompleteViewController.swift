@@ -5,37 +5,55 @@ import UIKit
 
 protocol AutocompleteViewControllerDelegate: AnyObject {
     func didSelectAutocompleteResult(_ result: String)
+    func didChangeSearchText(_ searchText: String)
 }
 
-class AutocompleteViewController: UITableViewController {
+class AutocompleteViewController: UITableViewController, AutocompleteViewModelDelegate {
     
-    weak var delegate: AutocompleteViewControllerDelegate?
+    var viewModel = AutocompleteViewModel()
+    var currentSearchText: String = "" { didSet { viewModel.updateSearchText(currentSearchText) } }
     
-    var autocompleteResults: [MovieDetailResultModel] = [] {
-        didSet {
-            tableView.reloadData()
+    func autocompleteResultsUpdated() {
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
-        navigationController?.isNavigationBarHidden = true
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        setupView()
+        viewModel.delegate = self
     }
+
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return autocompleteResults.count
+        return viewModel.numberOfResults
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = autocompleteResults[indexPath.row].title
+        if let result = viewModel.result(at: indexPath.row) {
+            cell.textLabel?.text = result.title
+        }
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let threshold = 20
+        let numberOfItems = viewModel.filteredCategories.count
+        
+        if indexPath.row >= numberOfItems - threshold && !viewModel.isLoadingMore {
+            viewModel.fetchNextPage()
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedResult = autocompleteResults[indexPath.row]
-        //delegate?.didSelectAutocompleteResult(selectedResult)
+        viewModel.didSelectRow(at: indexPath.row)
+    }
+    
+    private func setupView() {
+        view.backgroundColor = .white
+        navigationController?.isNavigationBarHidden = true
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
     }
 }

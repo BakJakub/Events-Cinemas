@@ -48,7 +48,7 @@ class EventCinemasController: UIViewController, AutocompleteViewControllerDelega
     private func setupSearchController() {
         let autocompleteVC = AutocompleteViewController()
         autocompleteViewController = autocompleteVC
-        autocompleteViewController.delegate = self
+        //autocompleteViewController.delegate = self
         searchControllerManager.delegateSearchBarText = self
         searchControllerManager.delegate = self
         searchControllerManager.setupSearchController(with: searchController.searchBar, autocompleteViewController: autocompleteVC)
@@ -108,7 +108,8 @@ extension EventCinemasController: SearchControllerManagerDelegate, SearchBarText
     
     func didChangeSearchText(_ searchText: String) {
         if searchText.count > 2 {
-            self.viewModel.currentSearchText = searchText
+            autocompleteViewController.currentSearchText = searchText
+//            /self.viewModel.currentSearchText = searchText
         }
     }
     
@@ -138,11 +139,11 @@ extension EventCinemasController: SearchControllerManagerDelegate, SearchBarText
 
 extension EventCinemasController: EventCinemasDelegate {
     
-    func filteredCategoriesUpdated(categories: [MovieDetailResultModel]) {
-        DispatchQueue.main.async {
-            self.autocompleteViewController.autocompleteResults = self.viewModel.filteredCategories
-        }
-    }
+//    func filteredCategoriesUpdated(categories: [MovieDetailResultModel]) {
+//        DispatchQueue.main.async {
+//            //self.autocompleteViewController.autocompleteResults = self.viewModel.filteredCategories
+//        }
+//    }
     
     func categoriesFetched() {
         DispatchQueue.main.async {
@@ -156,18 +157,12 @@ extension EventCinemasController: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         
         let threshold = 5
-        let numberOfItems = viewModel.isFiltering ? viewModel.filteredCategories.count : viewModel.categories.count
+        let numberOfItems = viewModel.categories.count
         
         guard numberOfItems > 0 else { return }
         
-        if viewModel.isFiltering {
-            if let lastIndexPath = indexPaths.last, lastIndexPath.item >= numberOfItems - threshold && !viewModel.isFetching {
-                viewModel.searchCategoriesAndUpdate()
-            }
-        } else {
-            if let lastIndexPath = indexPaths.last, lastIndexPath.item >= numberOfItems - threshold && !viewModel.isFetching {
-                viewModel.fetchNextPage()
-            }
+        if let lastIndexPath = indexPaths.last, lastIndexPath.item >= numberOfItems - threshold && !viewModel.isFetching {
+            viewModel.fetchNextPage()
         }
     }
 }

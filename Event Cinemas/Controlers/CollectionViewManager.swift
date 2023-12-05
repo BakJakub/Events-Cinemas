@@ -13,7 +13,8 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.isFiltering ? viewModel.filteredCategories.count : viewModel.categories.count
+        return viewModel.categories.count
+        //return viewModel.isFiltering ? viewModel.filteredCategories.count : viewModel.categories.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -21,7 +22,7 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
             return UICollectionViewCell()
         }
         
-        let category = viewModel.getFilteredCategory(at: indexPath.item) ?? viewModel.categories[indexPath.item]
+        let category = viewModel.categories[indexPath.item]
         cell.viewModel = EventsCellViewModel(category: category)
         
         return cell
@@ -34,7 +35,7 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedCategory = viewModel.getFilteredCategory(at: indexPath.item) ?? viewModel.categories[indexPath.item]
+        let selectedCategory = viewModel.categories[indexPath.item]
         
         let detailsVC = MovieDetailViewController()
         //detailsVC.category = selectedCategory

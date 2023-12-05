@@ -32,6 +32,7 @@
 		8C8940832B1E62960025B797 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8940822B1E62960025B797 /* APIClient.swift */; };
 		8C8940862B1E66680025B797 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8940852B1E66680025B797 /* Extensions.swift */; };
 		8C9468872B1F3CE500D0C593 /* AutocompleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9468862B1F3CE500D0C593 /* AutocompleteViewController.swift */; };
+		8C94688A2B1F6B0B00D0C593 /* AutocompleteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9468892B1F6B0B00D0C593 /* AutocompleteViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		8C8940822B1E62960025B797 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		8C8940852B1E66680025B797 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8C9468862B1F3CE500D0C593 /* AutocompleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteViewController.swift; sourceTree = "<group>"; };
+		8C9468892B1F6B0B00D0C593 /* AutocompleteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,11 +210,11 @@
 		8C89405C2B1DF1640025B797 /* Controlers */ = {
 			isa = PBXGroup;
 			children = (
+				8C9468862B1F3CE500D0C593 /* AutocompleteViewController.swift */,
 				8C8940712B1E36C80025B797 /* CollectionViewManager.swift */,
 				8C89405D2B1DF73E0025B797 /* EventCinemasController.swift */,
 				8C8940732B1E4CE40025B797 /* MovieDetailViewController.swift */,
 				8C89406F2B1E369B0025B797 /* SearchControllerManager.swift */,
-				8C9468862B1F3CE500D0C593 /* AutocompleteViewController.swift */,
 			);
 			path = Controlers;
 			sourceTree = "<group>";
@@ -220,9 +222,10 @@
 		8C89405F2B1DFA9F0025B797 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				8C9468892B1F6B0B00D0C593 /* AutocompleteViewModel.swift */,
 				8C8940602B1DFAAC0025B797 /* EventCinemasViewModel.swift */,
-				8C8940752B1E4D250025B797 /* MovieDetailViewModel.swift */,
 				8C8940662B1DFB980025B797 /* EventsCellViewModel.swift */,
+				8C8940752B1E4D250025B797 /* MovieDetailViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -390,6 +393,7 @@
 				8C8940692B1DFDEF0025B797 /* AppDelegate.swift in Sources */,
 				8C8940632B1DFAFB0025B797 /* EventCinemaModel.swift in Sources */,
 				8C8940812B1E61520025B797 /* ResultResponse.swift in Sources */,
+				8C94688A2B1F6B0B00D0C593 /* AutocompleteViewModel.swift in Sources */,
 				8C8940762B1E4D250025B797 /* MovieDetailViewModel.swift in Sources */,
 				8C8940862B1E66680025B797 /* Extensions.swift in Sources */,
 				8C89406D2B1E03A40025B797 /* EventCinemasView.swift in Sources */,
