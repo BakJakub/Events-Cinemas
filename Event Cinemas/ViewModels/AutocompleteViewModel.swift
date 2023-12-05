@@ -55,13 +55,7 @@ class AutocompleteViewModel {
     func fetchSearchMovies(page: Int, searchText: String) {
         guard !isLoadingMore else { return }
         isLoadingMore = true
-        
-        if searchText.count < 3 || searchText.isEmpty {
-            filteredCategories = filteredCategories.filter { $0.title.range(of: searchText, options: .caseInsensitive) != nil }
-            isLoadingMore = false
-            return
-        }
-        
+
         searchMovies(page: page, searchText: searchText) { [weak self] result in
             self?.isLoadingMore = false
             switch result {

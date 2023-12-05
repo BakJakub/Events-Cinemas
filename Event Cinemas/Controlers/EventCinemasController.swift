@@ -48,7 +48,6 @@ class EventCinemasController: UIViewController, AutocompleteViewControllerDelega
     private func setupSearchController() {
         let autocompleteVC = AutocompleteViewController()
         autocompleteViewController = autocompleteVC
-        //autocompleteViewController.delegate = self
         searchControllerManager.delegateSearchBarText = self
         searchControllerManager.delegate = self
         searchControllerManager.setupSearchController(with: searchController.searchBar, autocompleteViewController: autocompleteVC)
@@ -105,31 +104,24 @@ extension EventCinemasController: SearchControllerManagerDelegate, SearchBarText
         searchController.searchBar.text = result
     }
     
-    
     func didChangeSearchText(_ searchText: String) {
-        if searchText.count > 2 {
-            autocompleteViewController.currentSearchText = searchText
-//            /self.viewModel.currentSearchText = searchText
-        }
+        autocompleteViewController.currentSearchText = searchText
     }
     
     func didChangeSearchTextValue(_ searchText: String) {
-       
-        
         let navController = UINavigationController(rootViewController: autocompleteViewController)
         navController.modalPresentationStyle = .popover
         navController.preferredContentSize = CGSize(width: view.bounds.width, height: 200)
-        
+
         if let popoverController = navController.popoverPresentationController {
-            popoverController.sourceView = view
-            popoverController.sourceRect = CGRect(x: view.bounds.midX, y: searchController.searchBar.bounds.height + 100, width: 0, height: 0)
-            popoverController.permittedArrowDirections = []
+            popoverController.sourceView = searchController.searchBar
+            popoverController.sourceRect = CGRect(x: 0, y: searchController.searchBar.bounds.height, width: 0, height: 0)
+            popoverController.permittedArrowDirections = .up
             popoverController.delegate = self
             popoverController.backgroundColor = .white
-            popoverController.permittedArrowDirections = .up
             popoverController.passthroughViews = [searchController.searchBar]
         }
-        
+
         present(navController, animated: true) {
             self.view.isUserInteractionEnabled = false
             self.searchController.searchBar.isUserInteractionEnabled = true
@@ -138,12 +130,6 @@ extension EventCinemasController: SearchControllerManagerDelegate, SearchBarText
 }
 
 extension EventCinemasController: EventCinemasDelegate {
-    
-//    func filteredCategoriesUpdated(categories: [MovieDetailResultModel]) {
-//        DispatchQueue.main.async {
-//            //self.autocompleteViewController.autocompleteResults = self.viewModel.filteredCategories
-//        }
-//    }
     
     func categoriesFetched() {
         DispatchQueue.main.async {

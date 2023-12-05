@@ -14,7 +14,6 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.categories.count
-        //return viewModel.isFiltering ? viewModel.filteredCategories.count : viewModel.categories.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

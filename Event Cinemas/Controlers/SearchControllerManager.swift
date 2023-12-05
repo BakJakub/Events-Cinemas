@@ -19,7 +19,7 @@ class SearchControllerManager: NSObject, UISearchBarDelegate {
     func setupSearchController(with searchBar: UISearchBar, autocompleteViewController: AutocompleteViewController) {
         searchBar.delegate = self
         searchBar.searchTextField.delegate = self
-        searchBar.placeholder = "Search Movies (min 3 char)"
+        searchBar.placeholder = "Search Movies"
         self.autocompleteViewController = autocompleteViewController
     }
     

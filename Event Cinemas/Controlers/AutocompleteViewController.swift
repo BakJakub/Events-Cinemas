@@ -24,7 +24,7 @@ class AutocompleteViewController: UITableViewController, AutocompleteViewModelDe
         setupView()
         viewModel.delegate = self
     }
-
+    
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfResults
@@ -52,8 +52,14 @@ class AutocompleteViewController: UITableViewController, AutocompleteViewModelDe
     }
     
     private func setupView() {
-        view.backgroundColor = .white
-        navigationController?.isNavigationBarHidden = true
+        
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.backgroundColor = .purple
+        navigationController?.navigationBar.barTintColor = .purple
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+
+        if let navigationBarHeight = navigationController?.navigationBar.bounds.height {
+            tableView.contentInset = UIEdgeInsets(top: navigationBarHeight, left: 0, bottom: 0, right: 0)
+        }
     }
 }
