@@ -4,7 +4,6 @@ import Foundation
 
 protocol EventCinemasDelegate: AnyObject {
     func categoriesFetched()
-    func filteredCategoriesUpdated(categories: [MovieDetailResultModel])
 }
 
 class EventCinemasViewModel {
@@ -22,42 +21,13 @@ class EventCinemasViewModel {
     init(movieManager: MovieManager = MovieManager()) {
         self.movieManager = movieManager
     }
-    
-    var currentSearchText = "" {
-        didSet {
-            searchCategoriesAndUpdate()
-        }
-    }
-    
-    var isFiltering: Bool {
-        !currentSearchText.isEmpty
-    }
-    
+
     func fetchCategories() {
         fetchNextPage()
     }
     
     func getFilteredCategory(at index: Int) -> MovieDetailResultModel? {
-        if isFiltering {
-            return filteredCategories.indices.contains(index) ? filteredCategories[index] : nil
-        } else {
-            return categories.indices.contains(index) ? categories[index] : nil
-        }
-    }
-    
-    func updateSearchText(_ text: String) {
-        currentSearchText = text
-    }
-    
-    func searchCategories(for query: String) -> [MovieDetailResultModel] {
-        let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        return categories.filter { $0.title.range(of: trimmedQuery, options: .caseInsensitive) != nil }
-    }
-    
-    func searchCategoriesAndUpdate() {
-        let filtered = searchCategories(for: currentSearchText)
-        filteredCategories = filtered
-        delegate?.filteredCategoriesUpdated(categories: filteredCategories)
+        return categories.indices.contains(index) ? categories[index] : nil
     }
     
     func toggleFavoriteStatus(at index: Int) {
@@ -80,6 +50,7 @@ class EventCinemasViewModel {
         return favoriteMovies.contains(category.title)
     }
     
+    
     func fetchNextPage() {
         guard !isFetching else { return }
         isFetching = true
@@ -101,7 +72,7 @@ class EventCinemasViewModel {
     }
     
     func fetchMovies(page: Int, completion: @escaping (Result<[MovieResultModel]>) -> Void) {
-        movieManager.fetchNowPlayingMovies(page: page) { [weak self]  response in
+        movieManager.fetchNowPlayingMovies(page: page) { response in
             switch response {
             case .success(let data):
                 completion(.success([data]))
