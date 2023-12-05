@@ -4,7 +4,7 @@ import UIKit
 
 class EventCinemasController: UIViewController {
     
-    private var viewModel = EventsViewModel()
+    private var viewModel = EventCinemasViewModel()
     private var collectionView: UICollectionView!
     private var collectionViewManager: CollectionViewManager!
     private var searchControllerManager = SearchControllerManager()
@@ -87,8 +87,8 @@ extension EventCinemasController: SearchControllerManagerDelegate {
     }
 }
 
-extension EventCinemasController: EventsViewModelDelegate {
-    func filteredCategoriesUpdated(categories: [EventsCinemaModel]) {
+extension EventCinemasController: EventCinemasDelegate {
+    func filteredCategoriesUpdated(categories: [MovieDetailResultModel]) {
         collectionView.reloadData()
     }
     

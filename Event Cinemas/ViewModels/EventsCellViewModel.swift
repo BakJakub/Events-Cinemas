@@ -14,10 +14,10 @@ class EventsCellViewModel: EventsCellViewModelProtocol {
     let background: String
     var isFavorite: Bool
 
-    init(category: EventsCinemaModel, isFavorite: Bool = false) {
-        self.name = category.name
-        self.background = category.background
-        self.isFavorite = isFavorite
+    init(category: MovieDetailResultModel, isFavorite: Bool = false) {
+        self.name = category.title
+        self.background = category.posterPath
+        self.isFavorite = category.video
     }
 
     func toggleFavorite() {

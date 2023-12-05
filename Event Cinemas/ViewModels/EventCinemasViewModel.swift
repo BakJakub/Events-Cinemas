@@ -2,21 +2,21 @@
 
 import Foundation
 
-protocol EventsViewModelDelegate: AnyObject {
+protocol EventCinemasDelegate: AnyObject {
     func categoriesFetched()
-    func filteredCategoriesUpdated(categories: [EventsCinemaModel])
+    func filteredCategoriesUpdated(categories: [MovieDetailResultModel])
 }
 
-class EventsViewModel {
+class EventCinemasViewModel {
     
-    weak var delegate: EventsViewModelDelegate?
+    weak var delegate: EventCinemasDelegate?
     private let movieManager: MovieManager
     private let favoriteKey = "FavoriteMovies"
     
-    var categories: [EventsCinemaModel] = []
-    var categories2: [MovieDetailResultModel] = []
+    //var categories: [EventsCinemaModel] = []
+    var categories: [MovieDetailResultModel] = []
 
-    var filteredCategories: [EventsCinemaModel] = []
+    var filteredCategories: [MovieDetailResultModel] = []
     
     
     init(movieManager: MovieManager = MovieManager()) {
@@ -34,11 +34,11 @@ class EventsViewModel {
     }
     
     func fetchCategories() {
-        categories = [
-            EventsCinemaModel(id: 1, name: "Apartments", background: "apartments-category"),
-            EventsCinemaModel(id: 2, name: "Houses", background: "home-category"),
-            EventsCinemaModel(id: 3, name: "Houses2", background: "home-category2"),
-        ]
+//        categories = [
+//            EventsCinemaModel(id: 1, name: "Apartments", background: "apartments-category"),
+//            EventsCinemaModel(id: 2, name: "Houses", background: "home-category"),
+//            EventsCinemaModel(id: 3, name: "Houses2", background: "home-category2"),
+//        ]
         
         fetchNowPlayingMovies(page: 1) { res in
             
@@ -47,7 +47,7 @@ class EventsViewModel {
         delegate?.categoriesFetched()
     }
     
-    func getFilteredCategory(at index: Int) -> EventsCinemaModel? {
+    func getFilteredCategory(at index: Int) -> MovieDetailResultModel? {
         if isFiltering {
             return filteredCategories.indices.contains(index) ? filteredCategories[index] : nil
         } else {
@@ -59,9 +59,9 @@ class EventsViewModel {
         currentSearchText = text
     }
     
-    func searchCategories(for query: String) -> [EventsCinemaModel] {
+    func searchCategories(for query: String) -> [MovieDetailResultModel] {
         let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        return categories.filter { $0.name.range(of: trimmedQuery, options: .caseInsensitive) != nil }
+        return categories.filter { $0.title.range(of: trimmedQuery, options: .caseInsensitive) != nil }
     }
     
     func searchCategoriesAndUpdate() {
@@ -74,10 +74,10 @@ class EventsViewModel {
         guard let category = getFilteredCategory(at: index) else { return }
         var favoriteMovies = UserDefaults.standard.array(forKey: favoriteKey) as? [String] ?? []
         
-        if let index = favoriteMovies.firstIndex(of: category.name) {
+        if let index = favoriteMovies.firstIndex(of: category.title) {
             favoriteMovies.remove(at: index)
         } else {
-            favoriteMovies.append(category.name)
+            favoriteMovies.append(category.title)
         }
         
         UserDefaults.standard.set(favoriteMovies, forKey: favoriteKey)
@@ -87,7 +87,7 @@ class EventsViewModel {
     func isFavorite(at index: Int) -> Bool {
         guard let category = getFilteredCategory(at: index) else { return false }
         let favoriteMovies = UserDefaults.standard.array(forKey: favoriteKey) as? [String] ?? []
-        return favoriteMovies.contains(category.name)
+        return favoriteMovies.contains(category.title)
     }
     
 
@@ -95,7 +95,7 @@ class EventsViewModel {
         movieManager.fetchNowPlayingMovies(page: page) { [weak self] result in
             switch result {
             case .success(let movies):
-                self?.categories2 = movies.results
+                self?.categories = movies.results
                 self?.delegate?.categoriesFetched()
                 //completion(.success(movies))
           
