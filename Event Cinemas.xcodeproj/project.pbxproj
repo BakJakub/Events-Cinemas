@@ -31,6 +31,7 @@
 		8C8940812B1E61520025B797 /* ResultResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8940802B1E61520025B797 /* ResultResponse.swift */; };
 		8C8940832B1E62960025B797 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8940822B1E62960025B797 /* APIClient.swift */; };
 		8C8940862B1E66680025B797 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8940852B1E66680025B797 /* Extensions.swift */; };
+		8C9468872B1F3CE500D0C593 /* AutocompleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9468862B1F3CE500D0C593 /* AutocompleteViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,7 @@
 		8C8940802B1E61520025B797 /* ResultResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultResponse.swift; sourceTree = "<group>"; };
 		8C8940822B1E62960025B797 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		8C8940852B1E66680025B797 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		8C9468862B1F3CE500D0C593 /* AutocompleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,6 +212,7 @@
 				8C89405D2B1DF73E0025B797 /* EventCinemasController.swift */,
 				8C8940732B1E4CE40025B797 /* MovieDetailViewController.swift */,
 				8C89406F2B1E369B0025B797 /* SearchControllerManager.swift */,
+				8C9468862B1F3CE500D0C593 /* AutocompleteViewController.swift */,
 			);
 			path = Controlers;
 			sourceTree = "<group>";
@@ -378,6 +381,7 @@
 				8C89405E2B1DF73E0025B797 /* EventCinemasController.swift in Sources */,
 				8C89406B2B1E00B20025B797 /* SceneDelegate.swift in Sources */,
 				8C8940672B1DFB980025B797 /* EventsCellViewModel.swift in Sources */,
+				8C9468872B1F3CE500D0C593 /* AutocompleteViewController.swift in Sources */,
 				8C8940612B1DFAAC0025B797 /* EventCinemasViewModel.swift in Sources */,
 				8C8940722B1E36C80025B797 /* CollectionViewManager.swift in Sources */,
 				8C8940702B1E369B0025B797 /* SearchControllerManager.swift in Sources */,
