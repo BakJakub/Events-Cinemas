@@ -35,10 +35,7 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedCategory = viewModel.categories[indexPath.item]
-        
-        let detailsVC = MovieDetailViewController()
-        //detailsVC.category = selectedCategory
-
+        let detailsVC = MovieDetailViewController(data: selectedCategory)
         navigationController?.pushViewController(detailsVC, animated: true)
     }
 }

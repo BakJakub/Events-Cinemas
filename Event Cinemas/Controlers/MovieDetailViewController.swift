@@ -4,8 +4,16 @@ import UIKit
 
 class MovieDetailViewController: UIViewController {
     
-    var movieId: Int?
-    private var movie: MovieResultModel?
+    private var viewModel: MovieDetailViewModel
+
+    init(data: MovieDetailResultModel) {
+        self.viewModel = MovieDetailViewModel(data: data)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     private let loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
@@ -14,7 +22,7 @@ class MovieDetailViewController: UIViewController {
         return indicator
     }()
     
-    private let moviePosterImageView: UIImageView = {
+    private let movieBackdropImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -56,13 +64,13 @@ class MovieDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
+
         setupUI()
         loadData()
     }
     
     private func setupUI() {
-        view.addSubview(moviePosterImageView)
+        view.addSubview(movieBackdropImageView)
         view.addSubview(titleLabel)
         view.addSubview(releaseDateLabel)
         view.addSubview(ratingLabel)
@@ -71,13 +79,13 @@ class MovieDetailViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             // Movie Poster Image
-            moviePosterImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            moviePosterImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            moviePosterImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            moviePosterImageView.heightAnchor.constraint(equalToConstant: 180),
+            movieBackdropImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            movieBackdropImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            movieBackdropImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            movieBackdropImageView.heightAnchor.constraint(equalToConstant: 180),
             
             // Title Label
-            titleLabel.topAnchor.constraint(equalTo: moviePosterImageView.bottomAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: movieBackdropImageView.bottomAnchor, constant: 20),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
@@ -104,36 +112,24 @@ class MovieDetailViewController: UIViewController {
     }
     
     private func loadData() {
-        //guard let movieId = movieId else { return }
-        
         loadingIndicator.startAnimating()
         loadingIndicator.isHidden = false
+        viewModel.isLoading = true
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
-            self?.loadingIndicator.stopAnimating()
-            self?.loadingIndicator.isHidden = true
-            
-//            let movie = MovieModel()
-//            self?.movie = movie
-            
-            self?.updateUIWithMovieDetails()
+        viewModel.fetchMoviePoster { [weak self] image in
+            DispatchQueue.main.async { [weak self] in
+                self?.loadingIndicator.stopAnimating()
+                self?.loadingIndicator.isHidden = true
+                self?.movieBackdropImageView.image = image
+                self?.updateUIWithMovieDetails()
+            }
         }
     }
     
     private func updateUIWithMovieDetails() {
-//        guard let movie = movie else { return }
-//        
-//        moviePosterImageView.image = movie.posterImage
-//        titleLabel.text = movie.title
-//        releaseDateLabel.text = "Release Date: \(movie.releaseDate)"
-//        ratingLabel.text = "Rating: \(movie.rating)"
-//        overviewTextView.text = movie.overview
-        
-       // guard let movie = movie else { return }
-        
-        titleLabel.text = "movie.title"
-        releaseDateLabel.text = "Release Date:"
-        ratingLabel.text = "Rating:"
-        overviewTextView.text = "movie.overview"
+        titleLabel.text = viewModel.data.title
+        releaseDateLabel.text = "Release Date: \(viewModel.data.releaseDate ?? "Date not available")"
+        ratingLabel.text = "Rating: \(viewModel.data.voteAverage?.description ?? "Rating not available")"
+        overviewTextView.text = viewModel.data.overview ?? "Overview not available"
     }
 }

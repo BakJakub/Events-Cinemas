@@ -15,7 +15,6 @@ class EventCinemasViewModel {
     private var currentPage = 0
     var isFetching = false
     
-    var filteredCategories: [MovieDetailResultModel] = []
     
     
     init(movieManager: MovieManager = MovieManager()) {
