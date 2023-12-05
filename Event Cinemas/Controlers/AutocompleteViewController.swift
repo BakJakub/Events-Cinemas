@@ -1,6 +1,5 @@
 //Copyright (c) 2023 Jakub Bąk. All rights reserved.
 
-import Foundation
 import UIKit
 
 protocol AutocompleteViewControllerDelegate: AnyObject {
@@ -57,7 +56,7 @@ class AutocompleteViewController: UITableViewController, AutocompleteViewModelDe
         navigationController?.navigationBar.backgroundColor = .purple
         navigationController?.navigationBar.barTintColor = .purple
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-
+        
         if let navigationBarHeight = navigationController?.navigationBar.bounds.height {
             tableView.contentInset = UIEdgeInsets(top: navigationBarHeight, left: 0, bottom: 0, right: 0)
         }

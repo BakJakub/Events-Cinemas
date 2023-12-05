@@ -5,10 +5,10 @@ import UIKit
 class MovieDetailViewModel {
     
     var data: MovieDetailResultModel
-    private let movieManager: MovieManager
+    private let movieManager: MovieManagerApiRequest
     var isLoading = false
     
-    init(data: MovieDetailResultModel, movieManager: MovieManager = MovieManager()) {
+    init(data: MovieDetailResultModel, movieManager: MovieManagerApiRequest = MovieManagerApiRequest()) {
         self.data = data
         self.movieManager = movieManager
         self.fetchMovies(movieId: data.id) { result in

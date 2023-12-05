@@ -10,17 +10,15 @@ class EventCinemasViewModel {
     
     var categories: [MovieDetailResultModel] = []
     weak var delegate: EventCinemasDelegate?
-    private let movieManager: MovieManager
+    private let movieManager: MovieManagerApiRequest
     private let favoriteKey = "FavoriteMovies"
     private var currentPage = 0
     var isFetching = false
     
-    
-    
-    init(movieManager: MovieManager = MovieManager()) {
+    init(movieManager: MovieManagerApiRequest = MovieManagerApiRequest()) {
         self.movieManager = movieManager
     }
-
+    
     func fetchCategories() {
         fetchNextPage()
     }

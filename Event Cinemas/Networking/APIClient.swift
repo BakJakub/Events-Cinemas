@@ -5,11 +5,22 @@ import UIKit
 
 struct APIClient {
     
+    private let urlCache: URLCache = {
+        let memoryCapacity = 4 * 1024 * 1024
+        let diskCapacity = 20 * 1024 * 1024
+        let cache = URLCache(memoryCapacity: memoryCapacity, diskCapacity: diskCapacity, diskPath: "myCache")
+        return cache
+    }()
+    
+    init() {
+        URLCache.shared = urlCache
+    }
+    
     func fetchData<T: Decodable>(
         from endpoint: Endpoint,
         decodingType: T.Type,
         page: Int = 1,
-        additionalParams: [String: String] = [:], // Dodatkowe parametry
+        additionalParams: [String: String] = [:],
         completion: @escaping (Result<T>) -> Void
     ) {
         var urlComponents = URLComponents(url: endpoint.absoluteURL, resolvingAgainstBaseURL: true)
@@ -35,13 +46,27 @@ struct APIClient {
             return
         }
         
-        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YmM3NDc2ZThmZjk5ZjA1OTRhOGU3ZGEyOWUzZWU3ZSIsInN1YiI6IjY1NmRhZWE0ODg2MzQ4MDBjOWUyMjA2NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.V29W4RvpwbJ0UZh2d2OBshXzRsSJ70q22KDwXP7PLv4", forHTTPHeaderField: "Authorization")
-        print(request)
-        print(request.allHTTPHeaderFields)
+        
+        if let cachedResponse = urlCache.cachedResponse(for: request), let httpResponse = cachedResponse.response as? HTTPURLResponse {
+            let currentDate = Date()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
+            if let dateStr = httpResponse.allHeaderFields["Date"] as? String, let responseDate = dateFormatter.date(from: dateStr) {
+                let dataAge = currentDate.timeIntervalSince(responseDate)
+                let cacheValidity = 60 * 60 * 24
+                
+                if Int(dataAge) < cacheValidity {
+                    if let decodedData = try? JSONDecoder().decode(T.self, from: cachedResponse.data) {
+                        completion(.success(decodedData))
+                        return
+                    }
+                }
+            }
+        }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             
@@ -51,7 +76,6 @@ struct APIClient {
             }
             
             if !(200...299).contains(httpResponse.statusCode) {
-                print(httpResponse.statusCode)
                 do {
                     let errorResponse = try JSONDecoder().decode(ErrorResponse.self, from: data)
                     completion(.serverError(errorResponse))
@@ -64,6 +88,8 @@ struct APIClient {
             do {
                 let decoder = JSONDecoder()
                 let decodedData = try decoder.decode(T.self, from: data)
+                let cachedData = CachedURLResponse(response: httpResponse, data: data)
+                self.urlCache.storeCachedResponse(cachedData, for: request)
                 completion(.success(decodedData))
             } catch {
                 completion(.networkError("Failed to decode data"))
@@ -71,75 +97,3 @@ struct APIClient {
         }.resume()
     }
 }
-
-
-struct MovieManager {
-    
-    private let apiClient: APIClient
-    
-    init(apiClient: APIClient = APIClient()) {
-        self.apiClient = apiClient
-    }
-    
-    func fetchNowPlayingMovies(page: Int, completion: @escaping (Result<MovieResultModel>) -> Void) {
-        apiClient.fetchData(
-            from: .nowPlaying,
-            decodingType: MovieResultModel.self,
-            page: page) { result in
-                completion(result)
-            }
-    }
-    
-    func fetchSearchMovies(page: Int, searchText: String, completion: @escaping (Result<MovieResultModel>) -> Void) {
-        let additionalParams = ["query": searchText]
-        apiClient.fetchData(
-            from: .searchMovie,
-            decodingType: MovieResultModel.self,
-            page: page,
-            additionalParams: additionalParams) { result in
-                completion(result)
-            }
-    }
-    
-    func fetchDetailMovie(movieId: Int, completion: @escaping (Result<MovieDetailResultModel>) -> Void) {
-        apiClient.fetchData(
-            from: .movieDetails(movieId: movieId),
-            decodingType: MovieDetailResultModel.self) { result in
-                completion(result)
-            }
-    }
-    
-    func buildLinkImage(data: MovieDetailResultModel, completion: @escaping (URL?) -> Void) {
-        guard let backdropPath = data.backdropPath else {
-            completion(nil)
-            return
-        }
-        
-        let baseURLString = "https://image.tmdb.org/t/p/"
-        let fileSize = "w300"
-        
-        let fullImageURLString = baseURLString + fileSize + "/" + backdropPath
-        
-        guard let imageURL = URL(string: fullImageURLString) else {
-            completion(nil)
-            return
-        }
-        
-        completion(imageURL)
-    }
-    
-    func fetchImage(withURL imageURL: URL, completion: @escaping (UIImage?) -> Void) {
-        URLSession.shared.dataTask(with: imageURL) { data, response, error in
-            guard let data = data, error == nil else {
-                completion(nil)
-                return
-            }
-            if let image = UIImage(data: data) {
-                completion(image)
-            } else {
-                completion(nil)
-            }
-        }.resume()
-    }
-}
-

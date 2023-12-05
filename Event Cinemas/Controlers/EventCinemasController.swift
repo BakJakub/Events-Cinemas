@@ -8,7 +8,7 @@ class EventCinemasController: UIViewController, AutocompleteViewControllerDelega
     private var viewModel = EventCinemasViewModel()
     private var collectionView: UICollectionView!
     private var collectionViewManager: CollectionViewManager!
-    private var searchControllerManager = SearchControllerManager()
+    let searchControllerManager = SearchControllerManager<AnyObject>()
     private var autocompleteViewController = AutocompleteViewController()
     
     private var searchController: UISearchController = {

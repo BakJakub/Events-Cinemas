@@ -5,7 +5,7 @@ protocol AutocompleteViewModelDelegate: AnyObject {
 }
 
 class AutocompleteViewModel {
-    private let movieManager: MovieManager
+    private let movieManager: MovieManagerApiRequest
     weak var delegate: AutocompleteViewModelDelegate?
     var isLoadingMore = false
     private var currentPage = 1
@@ -18,7 +18,7 @@ class AutocompleteViewModel {
     
     var numberOfResults: Int { return filteredCategories.count }
     
-    init(movieManager: MovieManager = MovieManager()) {
+    init(movieManager: MovieManagerApiRequest = MovieManagerApiRequest()) {
         self.movieManager = movieManager
     }
 
