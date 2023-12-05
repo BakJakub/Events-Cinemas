@@ -112,11 +112,13 @@ extension EventCinemasController: EventCinemasDelegate {
 
 extension EventCinemasController: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        let visibleIndexPaths = collectionView.indexPathsForVisibleItems
-        let lastIndexPath = visibleIndexPaths.last ?? IndexPath(row: 0, section: 0)
-        let threshold = 5
         
-        if indexPaths.contains(where: { $0.item >= lastIndexPath.item - threshold }) && !isFetching {
+        let threshold = 5
+        let numberOfItems = viewModel.isFiltering ? viewModel.filteredCategories.count : viewModel.categories.count
+        
+        guard numberOfItems > 0 else { return }
+
+        if let lastIndexPath = indexPaths.last, lastIndexPath.item >= numberOfItems - threshold && !viewModel.isFetching {
             viewModel.fetchNextPage()
         }
     }

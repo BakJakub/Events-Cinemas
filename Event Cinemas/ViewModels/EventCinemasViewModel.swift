@@ -35,9 +35,6 @@ class EventCinemasViewModel {
     
     func fetchCategories() {
         fetchNextPage()
-//        fetchMovies(page: currentPage) { _ in
-//            self.delegate?.categoriesFetched()
-//        }
     }
     
     func getFilteredCategory(at index: Int) -> MovieDetailResultModel? {
@@ -107,8 +104,6 @@ class EventCinemasViewModel {
         movieManager.fetchNowPlayingMovies(page: page) { [weak self]  response in
             switch response {
             case .success(let data):
-//                self?.categories = data.results
-//                self?.delegate?.categoriesFetched()
                 completion(.success([data]))
             case .serverError(let serverError):
                 completion(.serverError(serverError))
@@ -117,24 +112,4 @@ class EventCinemasViewModel {
             }
         }
     }
-    
-    
-    //    func fetchMovies(page: Int, completion: @escaping (Result<[MovieResultModel]>) -> Void) {
-    //        guard !isFetching else { return }
-    //        isFetching = true
-    //        currentPage += 1
-    //
-    //        movieManager.fetchNowPlayingMovies(page: page) { [weak self]  response in
-    //            switch response {
-    //            case .success(let data):
-    //                self?.categories = data.results
-    //                self?.delegate?.categoriesFetched()
-    //                completion(.success([data]))
-    //            case .serverError(let serverError):
-    //                completion(.serverError(serverError))
-    //            case .networkError(let networkErrorMessage):
-    //                completion(.networkError(networkErrorMessage))
-    //            }
-    //        }
-    //    }
 }
