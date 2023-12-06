@@ -42,4 +42,3 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
         eventsCinemasDelegate?.didSelectCategory(selectedCategory)
     }
 }
-

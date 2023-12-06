@@ -29,6 +29,7 @@ class MovieDetailViewController: UIViewController {
         navigationItem.leftBarButtonItem = backButton
         
         loadData()
+        setupFavoriteButton()
     }
     
     @objc func backButtonTapped() {
@@ -57,5 +58,23 @@ class MovieDetailViewController: UIViewController {
         movieDetailView.releaseDateLabel.text = "Release Date: \(viewModel.data.releaseDate ?? "Date not available")"
         movieDetailView.ratingLabel.text = "Rating: \(viewModel.data.voteAverage?.description ?? "Rating not available")"
         movieDetailView.overviewTextView.text = viewModel.data.overview ?? "Overview not available"
+    }
+    
+    
+    private func setupFavoriteButton() {
+        let favoriteButton = UIBarButtonItem(image: UIImage(systemName: "star"), style: .plain, target: self, action: #selector(favoriteButtonTapped))
+        navigationItem.rightBarButtonItem = favoriteButton
+        updateFavoriteButtonState()
+    }
+
+    @objc private func favoriteButtonTapped() {
+        viewModel.toggleFavorite()
+        updateFavoriteButtonState()
+    }
+
+    private func updateFavoriteButtonState() {
+        let isFavorite = viewModel.isMovieFavorite()
+        let imageName = isFavorite ? "star.fill" : "star"
+        navigationItem.rightBarButtonItem?.image = UIImage(systemName: imageName)
     }
 }

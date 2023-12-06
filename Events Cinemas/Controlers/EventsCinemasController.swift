@@ -26,7 +26,7 @@ class EventsCinemasController: UIViewController {
     
     private let activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .large)
-        indicator.color = .gray // Kolor wskaźnika ładowania
+        indicator.color = .gray
         indicator.hidesWhenStopped = true
         return indicator
     }()

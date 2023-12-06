@@ -27,13 +27,13 @@ class EventsCollectionViewCell: UICollectionViewCell {
 
     @objc func favoriteButtonTapped() {
         guard let viewModel = viewModel else { return }
-        viewModel.toggleFavorite()
         favoriteButton.isSelected = viewModel.isFavorite
+        viewModel.toggleFavorite()
     }
 
     private func configure(with viewModel: EventsCellViewModelProtocol) {
         nameLabel.text = viewModel.name
-        favoriteButton.isSelected = viewModel.isFavorite
+        favoriteButton.isSelected = viewModel.checkIfFavorite()
     }
 
     private func setupFavoriteButton() {
