@@ -24,27 +24,39 @@ class EventsCinemasController: UIViewController {
         return controller
     }()
     
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .gray // Kolor wskaźnika ładowania
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
+    private var isAutocompleteVisible = false {
+        didSet {
+            setupAutocompleteView()
+            setupCollectionView()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupViewModel()
         setupSearchController()
+        startLoading()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        setupCollectionView()
+    private func startLoading() {
+        activityIndicator.startAnimating()
     }
+    
     private func setupUI() {
         setupCollectionViewPagination()
         setupCollectionViewManager()
         setupAutocompleteView()
         setupCollectionView()
-    }
-    
-    private var isAutocompleteVisible = false {
-        didSet {
-            setupUI()
-        }
+        view.addSubview(activityIndicator)
+        activityIndicator.center = view.center
     }
     
     private func setupAutocompleteView() {
@@ -66,10 +78,10 @@ class EventsCinemasController: UIViewController {
     }
     
     private func setupSearchController() {
-        searchControllerManager.delegateSearchBarText = self
         searchControllerManager.delegate = self
-        searchControllerManager.setupSearchController(with: searchController.searchBar)
+        searchControllerManager.delegateSearchBarText = self
         autocompleteViewController.eventsCinemasDelegate = self
+        searchControllerManager.setupSearchController(with: searchController.searchBar)
         
         navigationItem.searchController = isAutocompleteVisible ? nil : searchController
         navigationItem.hidesSearchBarWhenScrolling = false
@@ -119,7 +131,6 @@ class EventsCinemasController: UIViewController {
         collectionView.dataSource = collectionViewManager
         collectionView.delegate = collectionViewManager
     }
-    
 }
 
 extension EventsCinemasController: EventsCinemasSelectedDelegate {
@@ -152,6 +163,7 @@ extension EventsCinemasController: EventsCinemasDelegate {
     func categoriesFetched() {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
+            self.activityIndicator.stopAnimating()
         }
     }
 }
@@ -164,6 +176,7 @@ extension EventsCinemasController: UICollectionViewDataSourcePrefetching {
         guard numberOfItems > 0 else { return }
         
         if let lastIndexPath = indexPaths.last, lastIndexPath.item >= numberOfItems - threshold, !viewModel.isFetching {
+            self.activityIndicator.startAnimating()
             viewModel.fetchNextPage()
         }
     }

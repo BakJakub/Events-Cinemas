@@ -18,7 +18,6 @@ class SearchControllerManager: NSObject, UISearchBarDelegate {
     func setupSearchController(with searchBar: UISearchBar) {
         searchBar.delegate = self
         searchBar.placeholder = "Search Movies"
-        searchBar.showsCancelButton = true
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
