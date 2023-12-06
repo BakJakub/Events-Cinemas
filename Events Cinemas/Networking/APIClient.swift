@@ -61,7 +61,7 @@ struct APIClient {
                 }
             }
         }
-        print(request.url)
+
         URLSession.shared.dataTask(with: request) { data, response, error in
             
             guard let data = data, let httpResponse = response as? HTTPURLResponse, error == nil else {
