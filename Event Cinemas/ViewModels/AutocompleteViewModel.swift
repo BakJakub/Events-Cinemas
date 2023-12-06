@@ -5,43 +5,27 @@ protocol AutocompleteViewModelDelegate: AnyObject {
 }
 
 class AutocompleteViewModel {
-    private let movieManager: MovieManager
+    
+    private let movieManager: MovieManagerApiRequest
     weak var delegate: AutocompleteViewModelDelegate?
-    var isLoadingMore = false
+    private(set) var filteredCategories: [MovieDetailResultModel] = []
     private var currentPage = 1
-    var filteredCategories: [MovieDetailResultModel] = []
-    
-    var currentSearchText = "" { didSet {
-        filteredCategories = []
-        searchCategoriesAndUpdate()
-    } }
-    
+    var isLoadingMore = false { didSet { if !isLoadingMore { currentPage += 1 } } }
+    var currentSearchText = "" { didSet { filteredCategories = []; searchCategoriesAndUpdate() } }
     var numberOfResults: Int { return filteredCategories.count }
     
-    init(movieManager: MovieManager = MovieManager()) {
+    init(movieManager: MovieManagerApiRequest = MovieManagerApiRequest()) {
         self.movieManager = movieManager
     }
-
+    
     func fetchNextPage() {
-        if isLoadingMore { return }
-        isLoadingMore = false
-        currentPage += 1
+        guard !isLoadingMore else { return }
+        isLoadingMore = true
         searchCategoriesAndUpdate()
     }
     
     func result(at index: Int) -> MovieDetailResultModel? {
-        guard index < filteredCategories.count else { return nil }
-        return filteredCategories[index]
-    }
-    
-    func didSelectRow(at index: Int) {
-        // Handle selection here if needed
-    }
-    
-    func updateAutocompleteResults(_ results: [MovieDetailResultModel]) {
-        if currentPage == 1 { filteredCategories = results }
-        else { filteredCategories.append(contentsOf: results) }
-        delegate?.autocompleteResultsUpdated()
+        return index < filteredCategories.count ? filteredCategories[index] : nil
     }
     
     func updateSearchText(_ text: String) {
@@ -53,33 +37,16 @@ class AutocompleteViewModel {
     }
     
     func fetchSearchMovies(page: Int, searchText: String) {
-        guard !isLoadingMore else { return }
-        isLoadingMore = true
-
-        searchMovies(page: page, searchText: searchText) { [weak self] result in
-            self?.isLoadingMore = false
-            switch result {
-                case .success(let movies):
-                    if let movieResults = movies.first?.results {
-                        if page == 1 { self?.filteredCategories = movieResults }
-                        else { self?.filteredCategories.append(contentsOf: movieResults) }
-                        self?.delegate?.autocompleteResultsUpdated()
-                    }
-                case .serverError(_), .networkError(_):
-                    break
-            }
-        }
-    }
-    
-    func searchMovies(page: Int, searchText: String, completion: @escaping (Result<[MovieResultModel]>)-> Void) {
-        movieManager.fetchSearchMovies(page: page, searchText: searchText) {  response in
+        movieManager.fetchSearchMovies(page: page, searchText: searchText) { [weak self] response in
+            guard let self = self else { return }
+            self.isLoadingMore = false
+            
             switch response {
-                case .success(let data):
-                    completion(.success([data]))
-                case .serverError(let serverError):
-                    completion(.serverError(serverError))
-                case .networkError(let networkErrorMessage):
-                    completion(.networkError(networkErrorMessage))
+            case .success(let movies):
+                self.filteredCategories.append(contentsOf: movies.results)
+                self.delegate?.autocompleteResultsUpdated()
+            case .serverError, .networkError:
+                break
             }
         }
     }

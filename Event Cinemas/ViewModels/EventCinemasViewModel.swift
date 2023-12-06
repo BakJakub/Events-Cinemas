@@ -10,24 +10,21 @@ class EventCinemasViewModel {
     
     var categories: [MovieDetailResultModel] = []
     weak var delegate: EventCinemasDelegate?
-    private let movieManager: MovieManager
+    private let movieManager: MovieManagerApiRequest
     private let favoriteKey = "FavoriteMovies"
     private var currentPage = 0
     var isFetching = false
     
-    var filteredCategories: [MovieDetailResultModel] = []
-    
-    
-    init(movieManager: MovieManager = MovieManager()) {
+    init(movieManager: MovieManagerApiRequest = MovieManagerApiRequest()) {
         self.movieManager = movieManager
     }
-
+    
     func fetchCategories() {
         fetchNextPage()
     }
     
     func getFilteredCategory(at index: Int) -> MovieDetailResultModel? {
-        return categories.indices.contains(index) ? categories[index] : nil
+        categories.indices.contains(index) ? categories[index] : nil
     }
     
     func toggleFavoriteStatus(at index: Int) {
@@ -50,7 +47,6 @@ class EventCinemasViewModel {
         return favoriteMovies.contains(category.title)
     }
     
-    
     func fetchNextPage() {
         guard !isFetching else { return }
         isFetching = true
@@ -60,10 +56,7 @@ class EventCinemasViewModel {
             self?.isFetching = false
             switch result {
             case .success(let movies):
-                if let movieResults = movies.first?.results {
-                    self?.categories.append(contentsOf: movieResults)
-                    self?.delegate?.categoriesFetched()
-                }
+                self?.categories.append(contentsOf: movies)
                 self?.delegate?.categoriesFetched()
             case .serverError(_), .networkError(_):
                 break
@@ -71,11 +64,11 @@ class EventCinemasViewModel {
         }
     }
     
-    func fetchMovies(page: Int, completion: @escaping (Result<[MovieResultModel]>) -> Void) {
+    func fetchMovies(page: Int, completion: @escaping (Result<[MovieDetailResultModel]>) -> Void) {
         movieManager.fetchNowPlayingMovies(page: page) { response in
             switch response {
             case .success(let data):
-                completion(.success([data]))
+                completion(.success(data.results))
             case .serverError(let serverError):
                 completion(.serverError(serverError))
             case .networkError(let networkErrorMessage):
