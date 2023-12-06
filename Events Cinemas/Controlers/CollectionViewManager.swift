@@ -4,14 +4,14 @@ import UIKit
 
 class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    weak var eventCinemaDelegate: EventCinemaSelectedDelegate?
+    weak var eventsCinemasDelegate: EventsCinemasSelectedDelegate?
     weak var navigationController: UINavigationController?
-    private var viewModel: EventCinemasViewModel
+    private var viewModel: EventsCinemasViewModel
     private let cellIdentifier = "CategoryCell"
     private let cellHeight: CGFloat = 100
     private let cellInsets: CGFloat = 20
 
-    init(viewModel: EventCinemasViewModel, navigationController: UINavigationController? = nil) {
+    init(viewModel: EventsCinemasViewModel, navigationController: UINavigationController? = nil) {
         self.viewModel = viewModel
         self.navigationController = navigationController
         super.init()
@@ -39,7 +39,7 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedCategory = viewModel.categories[indexPath.item]
-        eventCinemaDelegate?.didSelectCategory(selectedCategory)
+        eventsCinemasDelegate?.didSelectCategory(selectedCategory)
     }
 }
 

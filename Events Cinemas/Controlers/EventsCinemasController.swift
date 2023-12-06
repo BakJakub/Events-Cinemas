@@ -2,16 +2,16 @@
 
 import UIKit
 
-protocol EventCinemaSelectedDelegate: AnyObject {
+protocol EventsCinemasSelectedDelegate: AnyObject {
     func didSelectCategory(_ moviewModel: MovieDetailResultModel)
 }
 
-class EventCinemasController: UIViewController {
+class EventsCinemasController: UIViewController {
     
     var coordinator: Coordinator?
     private var isFetching = false
-    private var viewModel = EventCinemasViewModel()
-    private lazy var collectionView = EventCinemasViewBuilder.buildCollectionView()
+    private var viewModel = EventsCinemasViewModel()
+    private lazy var collectionView = EventsCinemasViewBuilder.buildCollectionView()
     private var collectionViewManager: CollectionViewManager!
     private var autocompleteViewController = AutocompleteViewController()
     private var searchControllerManager = SearchControllerManager<AnyObject>()
@@ -52,7 +52,7 @@ class EventCinemasController: UIViewController {
         searchControllerManager.delegateSearchBarText = self
         searchControllerManager.delegate = self
         searchControllerManager.setupSearchController(with: searchController.searchBar, autocompleteViewController: autocompleteViewController)
-        autocompleteViewController.eventCinemaDelegate = self
+        autocompleteViewController.eventsCinemasDelegate = self
         navigationItem.searchController = searchController
     }
     
@@ -64,7 +64,7 @@ class EventCinemasController: UIViewController {
     private func setupCollectionViewManager() {
         collectionViewManager = CollectionViewManager(viewModel: viewModel)
         collectionViewManager.navigationController = navigationController
-        collectionViewManager.eventCinemaDelegate = self
+        collectionViewManager.eventsCinemasDelegate = self
         setupCollectionViewDelegate()
         setupCollectionViewDataSource()
     }
@@ -84,7 +84,7 @@ class EventCinemasController: UIViewController {
     }
 }
 
-extension EventCinemasController: EventCinemaSelectedDelegate {
+extension EventsCinemasController: EventsCinemasSelectedDelegate {
     
     func didSelectCategory(_ moviewModel: MovieDetailResultModel) {
         if let presentedViewController = presentedViewController {
@@ -101,13 +101,13 @@ extension EventCinemasController: EventCinemaSelectedDelegate {
     
 }
 
-extension EventCinemasController: UICollectionViewDelegate {
+extension EventsCinemasController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         view.endEditing(true)
     }
 }
 
-extension EventCinemasController: UIPopoverPresentationControllerDelegate {
+extension EventsCinemasController: UIPopoverPresentationControllerDelegate {
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
     }
@@ -117,19 +117,19 @@ extension EventCinemasController: UIPopoverPresentationControllerDelegate {
     }
 }
 
-extension EventCinemasController: SearchControllerManagerDelegate, SearchBarTextDelegate, PopoverDelegate {
+extension EventsCinemasController: SearchControllerManagerDelegate, SearchBarTextDelegate, PopoverDelegate {
     
     func didChangeSearchText(_ searchText: String) {
         autocompleteViewController.currentSearchText = searchText
     }
     
     func didChangeSearchTextValue(_ searchText: String) {
-          let navController = UINavigationController(rootViewController: autocompleteViewController)
-          configurePopover(for: navController, sourceView: searchController.searchBar, sourceRect: CGRect(x: 0, y: searchController.searchBar.bounds.height, width: 0, height: 0))
+//          let navController = UINavigationController(rootViewController: autocompleteViewController)
+//          configurePopover(for: navController, sourceView: searchController.searchBar, sourceRect: CGRect(x: 0, y: searchController.searchBar.bounds.height, width: 0, height: 0))
       }
 }
 
-extension EventCinemasController: EventCinemasDelegate {
+extension EventsCinemasController: EventsCinemasDelegate {
     func categoriesFetched() {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
@@ -137,7 +137,7 @@ extension EventCinemasController: EventCinemasDelegate {
     }
 }
 
-extension EventCinemasController: UICollectionViewDataSourcePrefetching {
+extension EventsCinemasController: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         let threshold = 5
         let numberOfItems = viewModel.categories.count

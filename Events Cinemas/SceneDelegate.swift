@@ -11,12 +11,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
-        let eventCinemasController = EventCinemasController()
-        let navigationController = UINavigationController(rootViewController: eventCinemasController)
+        let eventsCinemasController = EventsCinemasController()
+        let navigationController = UINavigationController(rootViewController: eventsCinemasController)
         window.rootViewController = navigationController
         
         coordinator = Coordinator(navigationController: navigationController)
-        eventCinemasController.coordinator = coordinator
+        eventsCinemasController.coordinator = coordinator
         
         self.window = window
         window.makeKeyAndVisible()

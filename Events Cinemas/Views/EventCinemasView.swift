@@ -2,7 +2,7 @@
 
 import UIKit
 
-struct EventCinemasViewBuilder {
+struct EventsCinemasViewBuilder {
     static func buildCollectionView() -> UICollectionView {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical

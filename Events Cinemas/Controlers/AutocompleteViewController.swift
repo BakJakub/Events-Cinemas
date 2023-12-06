@@ -5,7 +5,7 @@ import UIKit
 class AutocompleteViewController: UITableViewController, AutocompleteViewModelDelegate {
     
     var viewModel = AutocompleteViewModel()
-    weak var eventCinemaDelegate: EventCinemaSelectedDelegate?
+    weak var eventsCinemasDelegate: EventsCinemasSelectedDelegate?
     var currentSearchText: String = "" { didSet { viewModel.updateSearchText(currentSearchText) } }
     
     func autocompleteResultsUpdated() {
@@ -44,14 +44,14 @@ class AutocompleteViewController: UITableViewController, AutocompleteViewModelDe
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let selectedMovie = viewModel.result(at: indexPath.row) {
-            self.eventCinemaDelegate?.didSelectCategory(selectedMovie)
+            self.eventsCinemasDelegate?.didSelectCategory(selectedMovie)
         }
     }
     
     private func setupView() {
         
         navigationController?.navigationBar.tintColor = .white
-        navigationController?.navigationBar.backgroundColor = .purple
+        navigationController?.navigationBar.backgroundColor = .white
         navigationController?.navigationBar.barTintColor = .purple
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         

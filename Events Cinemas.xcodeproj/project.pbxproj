@@ -18,8 +18,8 @@
 		8C03E3D02B200D7C00967B90 /* APIClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C03E3CF2B200D7C00967B90 /* APIClientTests.swift */; };
 		8C6DDB5E2B1DE86000A02D0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C6DDB5D2B1DE86000A02D0A /* Assets.xcassets */; };
 		8C6DDB612B1DE86000A02D0A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C6DDB5F2B1DE86000A02D0A /* LaunchScreen.storyboard */; };
-		8C89405E2B1DF73E0025B797 /* EventCinemasController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C89405D2B1DF73E0025B797 /* EventCinemasController.swift */; };
-		8C8940612B1DFAAC0025B797 /* EventCinemasViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8940602B1DFAAC0025B797 /* EventCinemasViewModel.swift */; };
+		8C89405E2B1DF73E0025B797 /* EventsCinemasController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C89405D2B1DF73E0025B797 /* EventsCinemasController.swift */; };
+		8C8940612B1DFAAC0025B797 /* EventsCinemasViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8940602B1DFAAC0025B797 /* EventsCinemasViewModel.swift */; };
 		8C8940652B1DFB860025B797 /* EventsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8940642B1DFB860025B797 /* EventsCollectionViewCell.swift */; };
 		8C8940672B1DFB980025B797 /* EventsCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8940662B1DFB980025B797 /* EventsCellViewModel.swift */; };
 		8C8940692B1DFDEF0025B797 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8940682B1DFDEF0025B797 /* AppDelegate.swift */; };
@@ -71,8 +71,8 @@
 		8C6DDB5D2B1DE86000A02D0A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8C6DDB602B1DE86000A02D0A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8C6DDB622B1DE86000A02D0A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8C89405D2B1DF73E0025B797 /* EventCinemasController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCinemasController.swift; sourceTree = "<group>"; };
-		8C8940602B1DFAAC0025B797 /* EventCinemasViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCinemasViewModel.swift; sourceTree = "<group>"; };
+		8C89405D2B1DF73E0025B797 /* EventsCinemasController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCinemasController.swift; sourceTree = "<group>"; };
+		8C8940602B1DFAAC0025B797 /* EventsCinemasViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCinemasViewModel.swift; sourceTree = "<group>"; };
 		8C8940642B1DFB860025B797 /* EventsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCollectionViewCell.swift; sourceTree = "<group>"; };
 		8C8940662B1DFB980025B797 /* EventsCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCellViewModel.swift; sourceTree = "<group>"; };
 		8C8940682B1DFDEF0025B797 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -229,7 +229,7 @@
 			children = (
 				8C9468862B1F3CE500D0C593 /* AutocompleteViewController.swift */,
 				8C8940712B1E36C80025B797 /* CollectionViewManager.swift */,
-				8C89405D2B1DF73E0025B797 /* EventCinemasController.swift */,
+				8C89405D2B1DF73E0025B797 /* EventsCinemasController.swift */,
 				8C8940732B1E4CE40025B797 /* MovieDetailViewController.swift */,
 				8C89406F2B1E369B0025B797 /* SearchControllerManager.swift */,
 			);
@@ -240,7 +240,7 @@
 			isa = PBXGroup;
 			children = (
 				8C9468892B1F6B0B00D0C593 /* AutocompleteViewModel.swift */,
-				8C8940602B1DFAAC0025B797 /* EventCinemasViewModel.swift */,
+				8C8940602B1DFAAC0025B797 /* EventsCinemasViewModel.swift */,
 				8C8940662B1DFB980025B797 /* EventsCellViewModel.swift */,
 				8C8940752B1E4D250025B797 /* MovieDetailViewModel.swift */,
 			);
@@ -408,14 +408,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C89407B2B1E5F0B0025B797 /* Endpoint.swift in Sources */,
-				8C89405E2B1DF73E0025B797 /* EventCinemasController.swift in Sources */,
+				8C89405E2B1DF73E0025B797 /* EventsCinemasController.swift in Sources */,
 				8C89406B2B1E00B20025B797 /* SceneDelegate.swift in Sources */,
 				8C03E3972B1FE10E00967B90 /* MovieDetailResultModel.swift in Sources */,
 				8C03E3952B1FDCA200967B90 /* MovieManagerApiRequest.swift in Sources */,
 				8C8940672B1DFB980025B797 /* EventsCellViewModel.swift in Sources */,
 				8C03E39A2B1FE8FE00967B90 /* MovieDetailView.swift in Sources */,
 				8C9468872B1F3CE500D0C593 /* AutocompleteViewController.swift in Sources */,
-				8C8940612B1DFAAC0025B797 /* EventCinemasViewModel.swift in Sources */,
+				8C8940612B1DFAAC0025B797 /* EventsCinemasViewModel.swift in Sources */,
 				8C8940722B1E36C80025B797 /* CollectionViewManager.swift in Sources */,
 				8C8940702B1E369B0025B797 /* SearchControllerManager.swift in Sources */,
 				8C89407F2B1E61390025B797 /* ErrorResponse.swift in Sources */,

@@ -2,14 +2,14 @@
 
 import Foundation
 
-protocol EventCinemasDelegate: AnyObject {
+protocol EventsCinemasDelegate: AnyObject {
     func categoriesFetched()
 }
 
-class EventCinemasViewModel {
+class EventsCinemasViewModel {
     
     var categories: [MovieDetailResultModel] = []
-    weak var delegate: EventCinemasDelegate?
+    weak var delegate: EventsCinemasDelegate?
     private let movieManager: MovieManagerApiRequest
     private let favoriteKey = "FavoriteMovies"
     private var currentPage = 0
