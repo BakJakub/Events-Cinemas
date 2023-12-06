@@ -30,7 +30,7 @@ User Interface (UI)
 * The user interface is designed at the discretion of the developer, adhering to the project's guidelines.
 
 Running the Application
-*         Clone the repository to your local machine.
-*         Open the project in an iOS development environment (Xcode).
-*         Set up a simulator or connect an iPhone device with iOS 13 or newer.
-*         Run the application in the chosen environment.
+* Clone the repository to your local machine.
+* Open the project in an iOS development environment (Xcode).
+* Set up a simulator or connect an iPhone device with iOS 13 or newer.
+* Run the application in the chosen environment.
