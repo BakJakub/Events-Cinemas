@@ -20,7 +20,7 @@ class EventsCinemasController: UIViewController {
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: nil)
         controller.obscuresBackgroundDuringPresentation = false
-        controller.definesPresentationContext = true
+        controller.definesPresentationContext = false
         return controller
     }()
     
@@ -28,16 +28,14 @@ class EventsCinemasController: UIViewController {
         super.viewDidLoad()
         setupUI()
         setupViewModel()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        setupCollectionView()
         setupSearchController()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        setupCollectionView()
+    }
     private func setupUI() {
         setupCollectionViewPagination()
-        setupSearchController()
         setupCollectionViewManager()
         setupAutocompleteView()
         setupCollectionView()
@@ -53,9 +51,18 @@ class EventsCinemasController: UIViewController {
         addChild(autocompleteViewController)
         autocompleteViewController.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(autocompleteViewController.view)
-        setupAutocompleteViewConstarint()
+        setupAutocompleteViewConstraint()
         autocompleteViewController.didMove(toParent: self)
         autocompleteViewController.eventsCinemasDelegate = self
+    }
+    
+    private func setupAutocompleteViewConstraint() {
+        NSLayoutConstraint.activate([
+            autocompleteViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            autocompleteViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            autocompleteViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            autocompleteViewController.view.heightAnchor.constraint(equalToConstant: 400)
+        ])
     }
     
     private func setupSearchController() {
@@ -63,16 +70,12 @@ class EventsCinemasController: UIViewController {
         searchControllerManager.delegate = self
         searchControllerManager.setupSearchController(with: searchController.searchBar)
         autocompleteViewController.eventsCinemasDelegate = self
-        navigationItem.searchController = searchController
-    }
-    
-    func setupAutocompleteViewConstarint(){
-        NSLayoutConstraint.activate([
-            autocompleteViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
-            autocompleteViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            autocompleteViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            autocompleteViewController.view.heightAnchor.constraint(equalToConstant: 400)
-        ])
+        
+        navigationItem.searchController = isAutocompleteVisible ? nil : searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        if #available(iOS 16.0, *) {
+            navigationItem.preferredSearchBarPlacement = .stacked
+        }
     }
     
     private func setupCollectionView() {
@@ -94,7 +97,6 @@ class EventsCinemasController: UIViewController {
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
-    
     private func setupViewModel() {
         viewModel.delegate = self
         viewModel.fetchCategories()
@@ -105,7 +107,6 @@ class EventsCinemasController: UIViewController {
         collectionViewManager.navigationController = navigationController
         collectionViewManager.eventsCinemasDelegate = self
         setupCollectionViewDelegate()
-        setupCollectionViewDataSource()
     }
     
     private func setupCollectionViewPagination() {
@@ -115,12 +116,10 @@ class EventsCinemasController: UIViewController {
     }
     
     private func setupCollectionViewDelegate() {
+        collectionView.dataSource = collectionViewManager
         collectionView.delegate = collectionViewManager
     }
     
-    private func setupCollectionViewDataSource() {
-        collectionView.dataSource = collectionViewManager
-    }
 }
 
 extension EventsCinemasController: EventsCinemasSelectedDelegate {

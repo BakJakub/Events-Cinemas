@@ -21,14 +21,12 @@ class AutocompleteViewController: UITableViewController, AutocompleteViewModelDe
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.numberOfResults
+        return max(viewModel.numberOfResults, 1)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        if let result = viewModel.result(at: indexPath.row) {
-            cell.textLabel?.text = result.title
-        }
+        cell.textLabel?.text = viewModel.numberOfResults == 0 ? "Wprowadź tekst" : viewModel.result(at: indexPath.row)?.title
         return cell
     }
     
@@ -42,6 +40,7 @@ class AutocompleteViewController: UITableViewController, AutocompleteViewModelDe
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard viewModel.numberOfResults > 0 else { return }
         if let selectedMovie = viewModel.result(at: indexPath.row) {
             self.eventsCinemasDelegate?.didSelectCategory(selectedMovie)
         }

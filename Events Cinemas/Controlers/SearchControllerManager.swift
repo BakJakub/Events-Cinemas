@@ -18,10 +18,7 @@ class SearchControllerManager: NSObject, UISearchBarDelegate {
     func setupSearchController(with searchBar: UISearchBar) {
         searchBar.delegate = self
         searchBar.placeholder = "Search Movies"
-        
-        if let cancelButtonAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black] as [NSAttributedString.Key: Any]? {
-            UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelButtonAttributes, for: .normal)
-        }
+        searchBar.showsCancelButton = true
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
