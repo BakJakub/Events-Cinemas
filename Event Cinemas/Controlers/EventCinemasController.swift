@@ -6,34 +6,32 @@ class EventCinemasController: UIViewController, AutocompleteViewControllerDelega
     
     private var isFetching = false
     private var viewModel = EventCinemasViewModel()
-    private var collectionView: UICollectionView!
+    private lazy var collectionView = EventCinemasViewBuilder.buildCollectionView()
     private var collectionViewManager: CollectionViewManager!
-    let searchControllerManager = SearchControllerManager<AnyObject>()
     private var autocompleteViewController = AutocompleteViewController()
+    private var searchControllerManager = SearchControllerManager<AnyObject>()
     
-    private var searchController: UISearchController = {
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.definesPresentationContext = true
-        return searchController
+    private lazy var searchController: UISearchController = {
+        let controller = UISearchController(searchResultsController: nil)
+        controller.obscuresBackgroundDuringPresentation = false
+        controller.definesPresentationContext = true
+        return controller
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureCollectionView()
-        setupSearchController()
+        setupUI()
         setupViewModel()
-        setupCollectionViewManager()
+    }
+    
+    private func setupUI() {
+        configureCollectionView()
         setupCollectionViewPagination()
+        setupSearchController()
+        setupCollectionViewManager()
     }
     
     private func configureCollectionView() {
-        collectionView = EventCinemasViewBuilder.buildCollectionView()
-        setupCollectionViewConstraints()
-    }
-    
-    private func setupCollectionViewConstraints() {
-        collectionView = EventCinemasViewBuilder.buildCollectionView()
         collectionView.backgroundColor = .white
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
@@ -46,11 +44,9 @@ class EventCinemasController: UIViewController, AutocompleteViewControllerDelega
     }
     
     private func setupSearchController() {
-        let autocompleteVC = AutocompleteViewController()
-        autocompleteViewController = autocompleteVC
         searchControllerManager.delegateSearchBarText = self
         searchControllerManager.delegate = self
-        searchControllerManager.setupSearchController(with: searchController.searchBar, autocompleteViewController: autocompleteVC)
+        searchControllerManager.setupSearchController(with: searchController.searchBar, autocompleteViewController: autocompleteViewController)
         navigationItem.searchController = searchController
     }
     
@@ -67,8 +63,8 @@ class EventCinemasController: UIViewController, AutocompleteViewControllerDelega
     }
     
     private func setupCollectionViewPagination() {
-        let collectionViewFlowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
-        collectionViewFlowLayout?.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
+        let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        flowLayout?.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 0)
         collectionView.prefetchDataSource = self
     }
     
@@ -97,9 +93,8 @@ extension EventCinemasController: UIPopoverPresentationControllerDelegate {
     }
 }
 
-
-extension EventCinemasController: SearchControllerManagerDelegate, SearchBarTextDelegate {
-    
+extension EventCinemasController: SearchControllerManagerDelegate, SearchBarTextDelegate, PopoverDelegate {
+        
     func didSelectAutocompleteResult(_ result: String) {
         searchController.searchBar.text = result
     }
@@ -109,28 +104,12 @@ extension EventCinemasController: SearchControllerManagerDelegate, SearchBarText
     }
     
     func didChangeSearchTextValue(_ searchText: String) {
-        let navController = UINavigationController(rootViewController: autocompleteViewController)
-        navController.modalPresentationStyle = .popover
-        navController.preferredContentSize = CGSize(width: view.bounds.width, height: 200)
-
-        if let popoverController = navController.popoverPresentationController {
-            popoverController.sourceView = searchController.searchBar
-            popoverController.sourceRect = CGRect(x: 0, y: searchController.searchBar.bounds.height, width: 0, height: 0)
-            popoverController.permittedArrowDirections = .up
-            popoverController.delegate = self
-            popoverController.backgroundColor = .white
-            popoverController.passthroughViews = [searchController.searchBar]
-        }
-
-        present(navController, animated: true) {
-            self.view.isUserInteractionEnabled = false
-            self.searchController.searchBar.isUserInteractionEnabled = true
-        }
-    }
+          let navController = UINavigationController(rootViewController: autocompleteViewController)
+          configurePopover(for: navController, sourceView: searchController.searchBar, sourceRect: CGRect(x: 0, y: searchController.searchBar.bounds.height, width: 0, height: 0))
+      }
 }
 
 extension EventCinemasController: EventCinemasDelegate {
-    
     func categoriesFetched() {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
@@ -139,18 +118,14 @@ extension EventCinemasController: EventCinemasDelegate {
 }
 
 extension EventCinemasController: UICollectionViewDataSourcePrefetching {
-    
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        
         let threshold = 5
         let numberOfItems = viewModel.categories.count
         
         guard numberOfItems > 0 else { return }
         
-        if let lastIndexPath = indexPaths.last, lastIndexPath.item >= numberOfItems - threshold && !viewModel.isFetching {
+        if let lastIndexPath = indexPaths.last, lastIndexPath.item >= numberOfItems - threshold, !viewModel.isFetching {
             viewModel.fetchNextPage()
         }
     }
 }
-
-
