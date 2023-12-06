@@ -13,6 +13,7 @@ class AutocompleteViewModel {
     var isLoadingMore = false { didSet { if !isLoadingMore { currentPage += 1 } } }
     var currentSearchText = "" { didSet { filteredCategories = []; searchCategoriesAndUpdate() } }
     var numberOfResults: Int { return filteredCategories.count }
+    var lastSearchedText = ""
     
     init(movieManager: MovieManagerApiRequest = MovieManagerApiRequest()) {
         self.movieManager = movieManager
@@ -29,8 +30,14 @@ class AutocompleteViewModel {
     }
     
     func updateSearchText(_ text: String) {
-        currentSearchText = text
-    }
+            currentSearchText = text
+            if text != lastSearchedText {
+                lastSearchedText = text
+                filteredCategories = []
+                currentPage = 1
+                searchCategoriesAndUpdate()
+            }
+        }
     
     func searchCategoriesAndUpdate() {
         fetchSearchMovies(page: currentPage, searchText: currentSearchText)
@@ -43,9 +50,14 @@ class AutocompleteViewModel {
             
             switch response {
             case .success(let movies):
-                self.filteredCategories.append(contentsOf: movies.results)
+                if movies.results.isEmpty {
+                    self.currentPage -= 1
+                } else {
+                    self.filteredCategories.append(contentsOf: movies.results)
+                }
                 self.delegate?.autocompleteResultsUpdated()
             case .serverError, .networkError:
+                self.currentPage -= 1
                 break
             }
         }

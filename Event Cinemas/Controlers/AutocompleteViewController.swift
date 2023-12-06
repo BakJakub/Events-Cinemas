@@ -2,14 +2,10 @@
 
 import UIKit
 
-protocol AutocompleteViewControllerDelegate: AnyObject {
-    func didSelectAutocompleteResult(_ result: String)
-    func didChangeSearchText(_ searchText: String)
-}
-
 class AutocompleteViewController: UITableViewController, AutocompleteViewModelDelegate {
     
     var viewModel = AutocompleteViewModel()
+    weak var eventCinemaDelegate: EventCinemaSelectedDelegate?
     var currentSearchText: String = "" { didSet { viewModel.updateSearchText(currentSearchText) } }
     
     func autocompleteResultsUpdated() {
@@ -39,7 +35,7 @@ class AutocompleteViewController: UITableViewController, AutocompleteViewModelDe
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let threshold = 20
-        let numberOfItems = viewModel.filteredCategories.count
+        let numberOfItems = viewModel.numberOfResults
         
         if indexPath.row >= numberOfItems - threshold && !viewModel.isLoadingMore {
             viewModel.fetchNextPage()
@@ -47,7 +43,9 @@ class AutocompleteViewController: UITableViewController, AutocompleteViewModelDe
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //viewModel.didSelectRow(at: indexPath.row)
+        if let selectedMovie = viewModel.result(at: indexPath.row) {
+            self.eventCinemaDelegate?.didSelectCategory(selectedMovie)
+        }
     }
     
     private func setupView() {
