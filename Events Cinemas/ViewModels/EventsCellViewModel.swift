@@ -4,28 +4,30 @@ import UIKit
 
 protocol EventsCellViewModelProtocol {
     var name: String { get }
-    var isFavorite: Bool { get set }
+    var isFavorite: Bool { get }
     func toggleFavorite()
-    func checkIfFavorite() -> Bool
 }
 
 class EventsCellViewModel: EventsCellViewModelProtocol {
     
     let id: Int
     let name: String
-    var isFavorite: Bool = false
+    var isFavorite: Bool
+    var favoritesManager: FavoritesManager
     
-    init(category: MovieDetailResultModel) {
+    init(category: MovieDetailResultModel, favoritesManager: FavoritesManager) {
         self.name = category.title
         self.id = category.id
+        self.isFavorite = favoritesManager.isMovieFavorite(movieId: id)
+        self.favoritesManager = favoritesManager
     }
     
     func toggleFavorite() {
         isFavorite.toggle()
-        FavoritesManager.shared.toggleFavorite(movieId: id)
+        favoritesManager.toggleFavorite(movieId: id, isFavourite: isFavorite)
     }
     
     func checkIfFavorite() -> Bool {
-        return FavoritesManager.shared.isMovieFavorite(movieId: id)
+        return favoritesManager.isMovieFavorite(movieId: id)
     }
 }

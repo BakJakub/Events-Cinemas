@@ -6,7 +6,7 @@ class EventsCollectionViewCell: UICollectionViewCell {
     
     private let categoryImageView = UIImageView()
     private let nameLabel = UILabel()
-    private let favoriteButton = UIButton(type: .custom)
+    let favoriteButton = UIButton(type: .custom)
 
     var viewModel: EventsCellViewModelProtocol? {
         didSet {
@@ -27,13 +27,13 @@ class EventsCollectionViewCell: UICollectionViewCell {
 
     @objc func favoriteButtonTapped() {
         guard let viewModel = viewModel else { return }
-        favoriteButton.isSelected = viewModel.isFavorite
         viewModel.toggleFavorite()
+        favoriteButton.isSelected = viewModel.isFavorite
     }
 
     private func configure(with viewModel: EventsCellViewModelProtocol) {
         nameLabel.text = viewModel.name
-        favoriteButton.isSelected = viewModel.checkIfFavorite()
+        favoriteButton.isSelected = viewModel.isFavorite
     }
 
     private func setupFavoriteButton() {
@@ -69,4 +69,5 @@ class EventsCollectionViewCell: UICollectionViewCell {
         super.layoutSubviews()
         categoryImageView.frame = contentView.bounds
     }
+
 }

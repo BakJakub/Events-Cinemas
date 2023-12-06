@@ -10,7 +10,7 @@ struct MovieDetailResultModel: Codable {
     let voteAverage: Double?
     let overview: String?
     let backdropPath: String?
-    
+    var isFavorite: Bool?
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -24,5 +24,11 @@ struct MovieDetailResultModel: Codable {
     
     enum CodingKeys: String, CodingKey {
         case id, title, releaseDate = "release_date", backdropPath = "backdrop_path", voteAverage = "vote_average", overview
+    }
+    
+    mutating func toggleFavorite() {
+        guard var favorite = isFavorite else { return }
+        favorite.toggle()
+        isFavorite = favorite
     }
 }

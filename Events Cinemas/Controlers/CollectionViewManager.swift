@@ -10,6 +10,7 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
     private let cellIdentifier = "CategoryCell"
     private let cellHeight: CGFloat = 100
     private let cellInsets: CGFloat = 20
+    private var collectionView: UICollectionView? // Referencja do kolekcji
     
     init(viewModel: EventsCinemasViewModel, navigationController: UINavigationController? = nil) {
         self.viewModel = viewModel
@@ -27,7 +28,13 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
         }
         
         let category = viewModel.categories[indexPath.item]
-        cell.viewModel = EventsCellViewModel(category: category)
+        let favoritesManager = FavoritesManager()
+        let cellViewModel = EventsCellViewModel(category: category, favoritesManager: favoritesManager)
+        cell.viewModel = cellViewModel
+        cell.favoriteButton.tag = indexPath.item
+        cell.favoriteButton.isSelected = cellViewModel.isFavorite
+        
+        cell.favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped(_:)), for: .touchUpInside)
         
         return cell
     }
@@ -40,5 +47,18 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedCategory = viewModel.categories[indexPath.item]
         eventsCinemasDelegate?.didSelectCategory(selectedCategory)
+    }
+    
+    func setCollectionViewReference(_ collectionView: UICollectionView) {
+        self.collectionView = collectionView
+    }
+    
+    @objc func favoriteButtonTapped(_ sender: UIButton) {
+        guard let cell = sender.superview?.superview as? EventsCollectionViewCell,
+              let indexPath = collectionView?.indexPath(for: cell),
+              let viewModel = cell.viewModel else { return }
+
+        viewModel.toggleFavorite()
+        sender.isSelected = viewModel.isFavorite
     }
 }

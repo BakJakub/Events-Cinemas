@@ -64,13 +64,13 @@ class MovieDetailViewModel {
         }
     }
     
-    func toggleFavorite() {
-        let movieId = data.id
-        FavoritesManager.shared.toggleFavorite(movieId: movieId)
-    }
-
-    func isMovieFavorite() -> Bool {
-        let movieId = data.id
-        return FavoritesManager.shared.isMovieFavorite(movieId: movieId)
-    }
+//    func toggleFavorite() {
+//        let movieId = data.id
+//        FavoritesManager.shared.toggleFavorite(movieId: movieId)
+//    }
+//
+//    func isMovieFavorite() -> Bool {
+//        let movieId = data.id
+//        return FavoritesManager.shared.isMovieFavorite(movieId: movieId)
+//    }
 }
