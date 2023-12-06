@@ -4,6 +4,7 @@ import UIKit
 
 class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    weak var eventCinemaDelegate: EventCinemaSelectedDelegate?
     weak var navigationController: UINavigationController?
     private var viewModel: EventCinemasViewModel
     private let cellIdentifier = "CategoryCell"
@@ -38,8 +39,7 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedCategory = viewModel.categories[indexPath.item]
-        let detailsVC = MovieDetailViewController(data: selectedCategory)
-        navigationController?.pushViewController(detailsVC, animated: true)
+        eventCinemaDelegate?.didSelectCategory(selectedCategory)
     }
 }
 

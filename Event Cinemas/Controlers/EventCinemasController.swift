@@ -2,15 +2,20 @@
 
 import UIKit
 
-class EventCinemasController: UIViewController, AutocompleteViewControllerDelegate {
+protocol EventCinemaSelectedDelegate: AnyObject {
+    func didSelectCategory(_ moviewModel: MovieDetailResultModel)
+}
+
+class EventCinemasController: UIViewController {
     
+    var coordinator: Coordinator?
     private var isFetching = false
     private var viewModel = EventCinemasViewModel()
     private lazy var collectionView = EventCinemasViewBuilder.buildCollectionView()
     private var collectionViewManager: CollectionViewManager!
     private var autocompleteViewController = AutocompleteViewController()
     private var searchControllerManager = SearchControllerManager<AnyObject>()
-    
+
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: nil)
         controller.obscuresBackgroundDuringPresentation = false
@@ -47,6 +52,7 @@ class EventCinemasController: UIViewController, AutocompleteViewControllerDelega
         searchControllerManager.delegateSearchBarText = self
         searchControllerManager.delegate = self
         searchControllerManager.setupSearchController(with: searchController.searchBar, autocompleteViewController: autocompleteViewController)
+        autocompleteViewController.eventCinemaDelegate = self
         navigationItem.searchController = searchController
     }
     
@@ -58,6 +64,7 @@ class EventCinemasController: UIViewController, AutocompleteViewControllerDelega
     private func setupCollectionViewManager() {
         collectionViewManager = CollectionViewManager(viewModel: viewModel)
         collectionViewManager.navigationController = navigationController
+        collectionViewManager.eventCinemaDelegate = self
         setupCollectionViewDelegate()
         setupCollectionViewDataSource()
     }
@@ -77,6 +84,23 @@ class EventCinemasController: UIViewController, AutocompleteViewControllerDelega
     }
 }
 
+extension EventCinemasController: EventCinemaSelectedDelegate {
+    
+    func didSelectCategory(_ moviewModel: MovieDetailResultModel) {
+        if let presentedViewController = presentedViewController {
+            presentedViewController.dismiss(animated: true) {
+                self.coordinator?.pushMovieDetail(data: moviewModel)
+            }
+        } else if let navigationController = navigationController {
+            navigationController.popViewController(animated: true)
+            self.coordinator?.pushMovieDetail(data: moviewModel)
+        } else {
+            self.coordinator?.pushMovieDetail(data: moviewModel)
+        }
+    }
+    
+}
+
 extension EventCinemasController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         view.endEditing(true)
@@ -94,10 +118,6 @@ extension EventCinemasController: UIPopoverPresentationControllerDelegate {
 }
 
 extension EventCinemasController: SearchControllerManagerDelegate, SearchBarTextDelegate, PopoverDelegate {
-        
-    func didSelectAutocompleteResult(_ result: String) {
-        searchController.searchBar.text = result
-    }
     
     func didChangeSearchText(_ searchText: String) {
         autocompleteViewController.currentSearchText = searchText

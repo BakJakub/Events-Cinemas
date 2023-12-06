@@ -28,7 +28,7 @@ class SearchControllerManager<T>: NSObject, UISearchBarDelegate, UITextFieldDele
     }
     
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        guard let autocompleteVC = autocompleteViewController else { return false }
+        guard autocompleteViewController != nil else { return false }
         return true
     }
     
