@@ -7,7 +7,7 @@ protocol SearchControllerManagerDelegate: AnyObject {
 }
 
 protocol SearchBarTextDelegate: AnyObject {
-    func didChangeSearchTextValue(_ searchText: String)
+    func didChangeActiveStatus(_ active: Bool)
 }
 
 class SearchControllerManager<T>: NSObject, UISearchBarDelegate, UITextFieldDelegate {
@@ -20,7 +20,12 @@ class SearchControllerManager<T>: NSObject, UISearchBarDelegate, UITextFieldDele
         searchBar.delegate = self
         searchBar.searchTextField.delegate = self
         searchBar.placeholder = "Search Movies"
+
         self.autocompleteViewController = autocompleteViewController
+        
+        if let cancelButtonAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black] as [NSAttributedString.Key: Any]? {
+            UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelButtonAttributes, for: .normal)
+        }
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -34,8 +39,12 @@ class SearchControllerManager<T>: NSObject, UISearchBarDelegate, UITextFieldDele
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if let text = textField.text, text.isEmpty {
-            delegateSearchBarText?.didChangeSearchTextValue(text)
+            delegateSearchBarText?.didChangeActiveStatus(true)
         }
         return true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        delegateSearchBarText?.didChangeActiveStatus(false)
     }
 }

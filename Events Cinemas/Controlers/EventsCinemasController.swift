@@ -15,7 +15,8 @@ class EventsCinemasController: UIViewController {
     private var collectionViewManager: CollectionViewManager!
     private var autocompleteViewController = AutocompleteViewController()
     private var searchControllerManager = SearchControllerManager<AnyObject>()
-
+    private var collectionViewTopConstraint: NSLayoutConstraint?
+    
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: nil)
         controller.obscuresBackgroundDuringPresentation = false
@@ -29,23 +30,31 @@ class EventsCinemasController: UIViewController {
         setupViewModel()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        setupCollectionView()
+    }
+    
     private func setupUI() {
-        configureCollectionView()
         setupCollectionViewPagination()
         setupSearchController()
         setupCollectionViewManager()
+        setupAutocompleteView()
+        setupCollectionView()
     }
     
-    private func configureCollectionView() {
-        collectionView.backgroundColor = .white
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(collectionView)
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+    private var isAutocompleteVisible = false {
+        didSet {
+            setupUI()
+        }
+    }
+    
+    private func setupAutocompleteView() {
+        addChild(autocompleteViewController)
+        autocompleteViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(autocompleteViewController.view)
+        setupAutocompleteViewConstarint()
+        autocompleteViewController.didMove(toParent: self)
+        autocompleteViewController.eventsCinemasDelegate = self
     }
     
     private func setupSearchController() {
@@ -53,8 +62,38 @@ class EventsCinemasController: UIViewController {
         searchControllerManager.delegate = self
         searchControllerManager.setupSearchController(with: searchController.searchBar, autocompleteViewController: autocompleteViewController)
         autocompleteViewController.eventsCinemasDelegate = self
+        autocompleteViewController.delegateSearchBarText = self
         navigationItem.searchController = searchController
     }
+    
+    func setupAutocompleteViewConstarint(){
+        NSLayoutConstraint.activate([
+            autocompleteViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            autocompleteViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            autocompleteViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            autocompleteViewController.view.heightAnchor.constraint(equalToConstant: 400)
+        ])
+    }
+    
+    private func setupCollectionView() {
+        collectionView.backgroundColor = .white
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(collectionView)
+        setupCollectionViewConstraint()
+    }
+    
+    private func setupCollectionViewConstraint() {
+        collectionViewTopConstraint?.isActive = false
+        
+        let topAnchor: NSLayoutYAxisAnchor = isAutocompleteVisible ? autocompleteViewController.view.bottomAnchor : view.safeAreaLayoutGuide.topAnchor
+        collectionViewTopConstraint = collectionView.topAnchor.constraint(equalTo: topAnchor)
+        collectionViewTopConstraint?.isActive = true
+        
+        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    }
+    
     
     private func setupViewModel() {
         viewModel.delegate = self
@@ -87,16 +126,7 @@ class EventsCinemasController: UIViewController {
 extension EventsCinemasController: EventsCinemasSelectedDelegate {
     
     func didSelectCategory(_ moviewModel: MovieDetailResultModel) {
-        if let presentedViewController = presentedViewController {
-            presentedViewController.dismiss(animated: true) {
-                self.coordinator?.pushMovieDetail(data: moviewModel)
-            }
-        } else if let navigationController = navigationController {
-            navigationController.popViewController(animated: true)
-            self.coordinator?.pushMovieDetail(data: moviewModel)
-        } else {
-            self.coordinator?.pushMovieDetail(data: moviewModel)
-        }
+        self.coordinator?.pushMovieDetail(data: moviewModel)
     }
     
 }
@@ -107,26 +137,16 @@ extension EventsCinemasController: UICollectionViewDelegate {
     }
 }
 
-extension EventsCinemasController: UIPopoverPresentationControllerDelegate {
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .none
-    }
+extension EventsCinemasController: SearchControllerManagerDelegate, SearchBarTextDelegate {
     
-    func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
-        view.isUserInteractionEnabled = true
+    func didChangeActiveStatus(_ active: Bool) {
+        isAutocompleteVisible = active
     }
-}
-
-extension EventsCinemasController: SearchControllerManagerDelegate, SearchBarTextDelegate, PopoverDelegate {
     
     func didChangeSearchText(_ searchText: String) {
         autocompleteViewController.currentSearchText = searchText
     }
     
-    func didChangeSearchTextValue(_ searchText: String) {
-//          let navController = UINavigationController(rootViewController: autocompleteViewController)
-//          configurePopover(for: navController, sourceView: searchController.searchBar, sourceRect: CGRect(x: 0, y: searchController.searchBar.bounds.height, width: 0, height: 0))
-      }
 }
 
 extension EventsCinemasController: EventsCinemasDelegate {

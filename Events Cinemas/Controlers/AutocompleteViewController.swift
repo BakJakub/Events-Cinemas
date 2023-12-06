@@ -5,6 +5,7 @@ import UIKit
 class AutocompleteViewController: UITableViewController, AutocompleteViewModelDelegate {
     
     var viewModel = AutocompleteViewModel()
+    weak var delegateSearchBarText: SearchBarTextDelegate?
     weak var eventsCinemasDelegate: EventsCinemasSelectedDelegate?
     var currentSearchText: String = "" { didSet { viewModel.updateSearchText(currentSearchText) } }
     
@@ -20,7 +21,10 @@ class AutocompleteViewController: UITableViewController, AutocompleteViewModelDe
         viewModel.delegate = self
     }
     
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        delegateSearchBarText?.didChangeActiveStatus(false)
+    }
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfResults
     }
@@ -49,10 +53,6 @@ class AutocompleteViewController: UITableViewController, AutocompleteViewModelDe
     }
     
     private func setupView() {
-        
-        navigationController?.navigationBar.tintColor = .white
-        navigationController?.navigationBar.backgroundColor = .white
-        navigationController?.navigationBar.barTintColor = .purple
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         
         if let navigationBarHeight = navigationController?.navigationBar.bounds.height {
