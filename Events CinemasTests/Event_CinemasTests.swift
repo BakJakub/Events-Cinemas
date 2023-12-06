@@ -1,6 +1,6 @@
 //
 //  Event_CinemasTests.swift
-//  Event CinemasTests
+//  Events CinemasTests
 //
 //  Created by Jakub Bak on 04/12/2023.
 //

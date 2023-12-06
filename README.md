@@ -1,4 +1,4 @@
-#  Event Cinemas
+#  Events Cinemas
 
 Project Description
 

@@ -62,7 +62,7 @@
 		8C03E39C2B1FF00500967B90 /* Popover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Popover.swift; sourceTree = "<group>"; };
 		8C03E39E2B1FF2A200967B90 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		8C03E3A02B1FF95900967B90 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
-		8C6DDB512B1DE85F00A02D0A /* Event Cinemas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Event Cinemas.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C6DDB512B1DE85F00A02D0A /* Events Cinemas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Events Cinemas.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C6DDB5D2B1DE86000A02D0A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8C6DDB602B1DE86000A02D0A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8C6DDB622B1DE86000A02D0A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -136,9 +136,9 @@
 			isa = PBXGroup;
 			children = (
 				8C03E39E2B1FF2A200967B90 /* README.md */,
-				8C6DDB532B1DE85F00A02D0A /* Event Cinemas */,
-				8C6DDB6A2B1DE86000A02D0A /* Event CinemasTests */,
-				8C6DDB742B1DE86000A02D0A /* Event CinemasUITests */,
+				8C6DDB532B1DE85F00A02D0A /* Events Cinemas */,
+				8C6DDB6A2B1DE86000A02D0A /* Events CinemasTests */,
+				8C6DDB742B1DE86000A02D0A /* Events CinemasUITests */,
 				8C6DDB522B1DE85F00A02D0A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -146,14 +146,14 @@
 		8C6DDB522B1DE85F00A02D0A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8C6DDB512B1DE85F00A02D0A /* Event Cinemas.app */,
+				8C6DDB512B1DE85F00A02D0A /* Events Cinemas.app */,
 				8C6DDB672B1DE86000A02D0A /* Event CinemasTests.xctest */,
 				8C6DDB712B1DE86000A02D0A /* Event CinemasUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		8C6DDB532B1DE85F00A02D0A /* Event Cinemas */ = {
+		8C6DDB532B1DE85F00A02D0A /* Events Cinemas */ = {
 			isa = PBXGroup;
 			children = (
 				8C8940682B1DFDEF0025B797 /* AppDelegate.swift */,
@@ -168,24 +168,24 @@
 				8C89405F2B1DFA9F0025B797 /* ViewModels */,
 				8C8940582B1DF0D30025B797 /* Views */,
 			);
-			path = "Event Cinemas";
+			path = "Events Cinemas";
 			sourceTree = "<group>";
 		};
-		8C6DDB6A2B1DE86000A02D0A /* Event CinemasTests */ = {
+		8C6DDB6A2B1DE86000A02D0A /* Events CinemasTests */ = {
 			isa = PBXGroup;
 			children = (
 				8C6DDB6B2B1DE86000A02D0A /* Event_CinemasTests.swift */,
 			);
-			path = "Event CinemasTests";
+			path = "Events CinemasTests";
 			sourceTree = "<group>";
 		};
-		8C6DDB742B1DE86000A02D0A /* Event CinemasUITests */ = {
+		8C6DDB742B1DE86000A02D0A /* Events CinemasUITests */ = {
 			isa = PBXGroup;
 			children = (
 				8C6DDB752B1DE86000A02D0A /* Event_CinemasUITests.swift */,
 				8C6DDB772B1DE86000A02D0A /* Event_CinemasUITestsLaunchTests.swift */,
 			);
-			path = "Event CinemasUITests";
+			path = "Events CinemasUITests";
 			sourceTree = "<group>";
 		};
 		8C8940572B1DF0CD0025B797 /* Models */ = {
@@ -262,9 +262,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8C6DDB502B1DE85F00A02D0A /* Event Cinemas */ = {
+		8C6DDB502B1DE85F00A02D0A /* Events Cinemas */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8C6DDB7B2B1DE86000A02D0A /* Build configuration list for PBXNativeTarget "Event Cinemas" */;
+			buildConfigurationList = 8C6DDB7B2B1DE86000A02D0A /* Build configuration list for PBXNativeTarget "Events Cinemas" */;
 			buildPhases = (
 				8C6DDB4D2B1DE85F00A02D0A /* Sources */,
 				8C6DDB4E2B1DE85F00A02D0A /* Frameworks */,
@@ -274,9 +274,9 @@
 			);
 			dependencies = (
 			);
-			name = "Event Cinemas";
+			name = "Events Cinemas";
 			productName = "Event Cinemas";
-			productReference = 8C6DDB512B1DE85F00A02D0A /* Event Cinemas.app */;
+			productReference = 8C6DDB512B1DE85F00A02D0A /* Events Cinemas.app */;
 			productType = "com.apple.product-type.application";
 		};
 		8C6DDB662B1DE86000A02D0A /* Event CinemasTests */ = {
@@ -351,7 +351,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8C6DDB502B1DE85F00A02D0A /* Event Cinemas */,
+				8C6DDB502B1DE85F00A02D0A /* Events Cinemas */,
 				8C6DDB662B1DE86000A02D0A /* Event CinemasTests */,
 				8C6DDB702B1DE86000A02D0A /* Event CinemasUITests */,
 			);
@@ -438,12 +438,12 @@
 /* Begin PBXTargetDependency section */
 		8C6DDB692B1DE86000A02D0A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8C6DDB502B1DE85F00A02D0A /* Event Cinemas */;
+			target = 8C6DDB502B1DE85F00A02D0A /* Events Cinemas */;
 			targetProxy = 8C6DDB682B1DE86000A02D0A /* PBXContainerItemProxy */;
 		};
 		8C6DDB732B1DE86000A02D0A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8C6DDB502B1DE85F00A02D0A /* Event Cinemas */;
+			target = 8C6DDB502B1DE85F00A02D0A /* Events Cinemas */;
 			targetProxy = 8C6DDB722B1DE86000A02D0A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -589,8 +589,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5476D9863H;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Event Cinemas/Resources/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Event Cinemas";
+				INFOPLIST_FILE = "Events Cinemas/Resources/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Events Cinemas";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.news";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -602,7 +602,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "jakubBak.Event-Cinemas";
+				PRODUCT_BUNDLE_IDENTIFIER = "jakubBak.Events-Cinemas";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -624,8 +624,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5476D9863H;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Event Cinemas/Resources/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Event Cinemas";
+				INFOPLIST_FILE = "Events Cinemas/Resources/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Events Cinemas";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.news";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -637,7 +637,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "jakubBak.Event-Cinemas";
+				PRODUCT_BUNDLE_IDENTIFIER = "jakubBak.Events-Cinemas";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -737,7 +737,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8C6DDB7B2B1DE86000A02D0A /* Build configuration list for PBXNativeTarget "Event Cinemas" */ = {
+		8C6DDB7B2B1DE86000A02D0A /* Build configuration list for PBXNativeTarget "Events Cinemas" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8C6DDB7C2B1DE86000A02D0A /* Debug */,
