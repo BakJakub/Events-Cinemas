@@ -14,7 +14,7 @@ class EventsCinemasController: UIViewController {
     private lazy var collectionView = EventsCinemasViewBuilder.buildCollectionView()
     private var collectionViewManager: CollectionViewManager!
     private var autocompleteViewController = AutocompleteViewController()
-    private var searchControllerManager = SearchControllerManager<AnyObject>()
+    private var searchControllerManager = SearchControllerManager()
     private var collectionViewTopConstraint: NSLayoutConstraint?
     
     private lazy var searchController: UISearchController = {
@@ -29,9 +29,10 @@ class EventsCinemasController: UIViewController {
         setupUI()
         setupViewModel()
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         setupCollectionView()
+        setupSearchController()
     }
     
     private func setupUI() {
@@ -60,9 +61,8 @@ class EventsCinemasController: UIViewController {
     private func setupSearchController() {
         searchControllerManager.delegateSearchBarText = self
         searchControllerManager.delegate = self
-        searchControllerManager.setupSearchController(with: searchController.searchBar, autocompleteViewController: autocompleteViewController)
+        searchControllerManager.setupSearchController(with: searchController.searchBar)
         autocompleteViewController.eventsCinemasDelegate = self
-        autocompleteViewController.delegateSearchBarText = self
         navigationItem.searchController = searchController
     }
     

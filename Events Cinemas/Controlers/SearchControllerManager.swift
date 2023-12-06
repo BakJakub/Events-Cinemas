@@ -10,18 +10,14 @@ protocol SearchBarTextDelegate: AnyObject {
     func didChangeActiveStatus(_ active: Bool)
 }
 
-class SearchControllerManager<T>: NSObject, UISearchBarDelegate, UITextFieldDelegate {
+class SearchControllerManager: NSObject, UISearchBarDelegate {
     
     weak var delegate: SearchControllerManagerDelegate?
-    weak var autocompleteViewController: AutocompleteViewController?
     weak var delegateSearchBarText: SearchBarTextDelegate?
-    
-    func setupSearchController(with searchBar: UISearchBar, autocompleteViewController: AutocompleteViewController) {
-        searchBar.delegate = self
-        searchBar.searchTextField.delegate = self
-        searchBar.placeholder = "Search Movies"
 
-        self.autocompleteViewController = autocompleteViewController
+    func setupSearchController(with searchBar: UISearchBar) {
+        searchBar.delegate = self
+        searchBar.placeholder = "Search Movies"
         
         if let cancelButtonAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black] as [NSAttributedString.Key: Any]? {
             UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(cancelButtonAttributes, for: .normal)
@@ -29,22 +25,16 @@ class SearchControllerManager<T>: NSObject, UISearchBarDelegate, UITextFieldDele
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        delegate?.didChangeSearchText(searchText)
-    }
-    
-    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        guard autocompleteViewController != nil else { return false }
-        return true
-    }
-    
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if let text = textField.text, text.isEmpty {
-            delegateSearchBarText?.didChangeActiveStatus(true)
-        }
-        return true
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        delegateSearchBarText?.didChangeActiveStatus(false)
-    }
+         delegate?.didChangeSearchText(searchText)
+     }
+     
+     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+         delegateSearchBarText?.didChangeActiveStatus(true)
+         return true
+     }
+     
+     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+         searchBar.resignFirstResponder()
+         delegateSearchBarText?.didChangeActiveStatus(false)
+     }
 }

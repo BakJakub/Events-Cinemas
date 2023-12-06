@@ -10,7 +10,7 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
     private let cellIdentifier = "CategoryCell"
     private let cellHeight: CGFloat = 100
     private let cellInsets: CGFloat = 20
-
+    
     init(viewModel: EventsCinemasViewModel, navigationController: UINavigationController? = nil) {
         self.viewModel = viewModel
         self.navigationController = navigationController

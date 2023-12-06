@@ -6,9 +6,11 @@ class MovieDetailViewController: UIViewController {
     
     private var viewModel: MovieDetailViewModel
     private var movieDetailView: MovieDetailView!
-
-    init(data: MovieDetailResultModel) {
+    var coordinator: Coordinator?
+    
+    init(data: MovieDetailResultModel, coordinator: Coordinator) {
         self.viewModel = MovieDetailViewModel(data: data)
+        self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -19,12 +21,19 @@ class MovieDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-
+        
         movieDetailView = MovieDetailView(frame: view.bounds)
         view.addSubview(movieDetailView)
         
+        let backButton = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backButtonTapped))
+        navigationItem.leftBarButtonItem = backButton
+        
         loadData()
     }
+    
+    @objc func backButtonTapped() {
+           coordinator?.popToPreviousViewController()
+       }
     
     private func loadData() {
         guard !viewModel.isLoading else { return }
