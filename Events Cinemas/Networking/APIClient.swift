@@ -22,13 +22,28 @@ struct APIClient {
         additionalParams: [String: String] = [:],
         completion: @escaping (Result<T>) -> Void
     ) {
+        let request = createRequest(from: endpoint, page: page, additionalParams: additionalParams)
+        
+        if let cachedData: T = getCachedData(for: request) {
+            completion(.success(cachedData))
+            return
+        }
+        
+        performRequest(request, completion: completion)
+    }
+    
+    private func createRequest(
+        from endpoint: Endpoint,
+        page: Int,
+        additionalParams: [String: String]
+    ) -> URLRequest {
         var urlComponents = URLComponents(url: endpoint.absoluteURL, resolvingAgainstBaseURL: true)
         
         var queryItems = [
             URLQueryItem(name: "language", value: "en-US"),
             URLQueryItem(name: "page", value: "\(page)")
         ]
-
+        
         for (key, value) in additionalParams {
             queryItems.append(URLQueryItem(name: key, value: value))
         }
@@ -36,8 +51,7 @@ struct APIClient {
         urlComponents?.queryItems = queryItems
         
         guard let url = urlComponents?.url else {
-            completion(.networkError("Invalid URL"))
-            return
+            fatalError("Invalid URL")
         }
         
         var request = URLRequest(url: url)
@@ -45,6 +59,10 @@ struct APIClient {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YmM3NDc2ZThmZjk5ZjA1OTRhOGU3ZGEyOWUzZWU3ZSIsInN1YiI6IjY1NmRhZWE0ODg2MzQ4MDBjOWUyMjA2NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.V29W4RvpwbJ0UZh2d2OBshXzRsSJ70q22KDwXP7PLv4", forHTTPHeaderField: "Authorization")
         
+        return request
+    }
+    
+    private func getCachedData<T: Decodable>(for request: URLRequest) -> T? {
         if let cachedResponse = urlCache.cachedResponse(for: request), let httpResponse = cachedResponse.response as? HTTPURLResponse {
             let currentDate = Date()
             let dateFormatter = DateFormatter()
@@ -54,14 +72,15 @@ struct APIClient {
                 let cacheValidity = 60 * 60 * 24
                 
                 if Int(dataAge) < cacheValidity {
-                    if let decodedData = try? JSONDecoder().decode(T.self, from: cachedResponse.data) {
-                        completion(.success(decodedData))
-                        return
-                    }
+                    return try? JSONDecoder().decode(T.self, from: cachedResponse.data)
                 }
             }
         }
-
+        
+        return nil
+    }
+    
+    private func performRequest<T: Decodable>(_ request: URLRequest, completion: @escaping (Result<T>) -> Void) {
         URLSession.shared.dataTask(with: request) { data, response, error in
             
             guard let data = data, let httpResponse = response as? HTTPURLResponse, error == nil else {

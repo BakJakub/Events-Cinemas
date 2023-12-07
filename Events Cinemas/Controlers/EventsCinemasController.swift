@@ -114,7 +114,6 @@ class EventsCinemasController: UIViewController {
     
     private func setupCollectionViewManager() {
         collectionViewManager = CollectionViewManager(viewModel: viewModel, favoritesManager: FavoritesManager())
-        collectionViewManager.navigationController = navigationController
         collectionViewManager.eventsCinemasDelegate = self
         setupCollectionViewDelegate()
     }

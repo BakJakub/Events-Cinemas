@@ -5,7 +5,6 @@ import UIKit
 class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     weak var eventsCinemasDelegate: EventsCinemasSelectedDelegate?
-    weak var navigationController: UINavigationController?
     private var viewModel: EventsCinemasViewModel
     private let cellIdentifier = "CategoryCell"
     var favoritesManager: FavoritesManager
@@ -16,7 +15,6 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
     init(viewModel: EventsCinemasViewModel, favoritesManager: FavoritesManager, navigationController: UINavigationController? = nil) {
         self.viewModel = viewModel
         self.favoritesManager = favoritesManager
-        self.navigationController = navigationController
         super.init()
         self.favoritesManager.addObserver(self)
     }
