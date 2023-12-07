@@ -8,7 +8,7 @@ This project is an iOS application that allows users to browse a list of movies 
 Functionalities:
 
 Movie List
-* The application uses the /movie/now_playing endpoint from The Movie DB API to display a list of movies currently being shown in theaters.
+* The application uses the /movie/now_playing endpoint from The Movie DB API to display a list of movies currently being shown in cinemas.
 
 Movie Details
 * Upon selecting a specific movie from the list, users can view a details screen containing the movie poster, title, release date, rating, and a brief overview.
