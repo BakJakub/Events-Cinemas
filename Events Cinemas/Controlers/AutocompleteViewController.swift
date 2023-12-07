@@ -19,7 +19,7 @@ class AutocompleteViewController: UITableViewController, AutocompleteViewModelDe
         setupView()
         viewModel.delegate = self
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return max(viewModel.numberOfResults, 1)
     }

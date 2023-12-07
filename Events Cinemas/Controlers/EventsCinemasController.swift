@@ -33,7 +33,6 @@ class EventsCinemasController: UIViewController {
     
     private var isAutocompleteVisible = false {
         didSet {
-            setupAutocompleteView()
             setupCollectionView()
         }
     }
@@ -78,15 +77,14 @@ class EventsCinemasController: UIViewController {
     }
     
     private func setupSearchController() {
+        searchControllerManager.setupSearchController(with: searchController.searchBar)
         searchControllerManager.delegate = self
         searchControllerManager.delegateSearchBarText = self
         autocompleteViewController.eventsCinemasDelegate = self
-        searchControllerManager.setupSearchController(with: searchController.searchBar)
-        
-        navigationItem.searchController = isAutocompleteVisible ? nil : searchController
+        navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         if #available(iOS 16.0, *) {
-            navigationItem.preferredSearchBarPlacement = .stacked
+            navigationItem.preferredSearchBarPlacement = .inline
         }
     }
     
@@ -115,7 +113,7 @@ class EventsCinemasController: UIViewController {
     }
     
     private func setupCollectionViewManager() {
-        collectionViewManager = CollectionViewManager(viewModel: viewModel)
+        collectionViewManager = CollectionViewManager(viewModel: viewModel, favoritesManager: FavoritesManager())
         collectionViewManager.navigationController = navigationController
         collectionViewManager.eventsCinemasDelegate = self
         setupCollectionViewDelegate()

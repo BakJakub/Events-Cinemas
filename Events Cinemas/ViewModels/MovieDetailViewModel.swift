@@ -10,7 +10,6 @@ class MovieDetailViewModel {
     private let movieManager: MovieManagerApiRequest
     var favoritesManager = FavoritesManager()
     
-    
     init(data: MovieDetailResultModel, movieManager: MovieManagerApiRequest = MovieManagerApiRequest()) {
         self.data = data
         self.movieManager = movieManager

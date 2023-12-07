@@ -7,17 +7,18 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
     weak var eventsCinemasDelegate: EventsCinemasSelectedDelegate?
     weak var navigationController: UINavigationController?
     private var viewModel: EventsCinemasViewModel
-    var favoritesManager = FavoritesManager()
     private let cellIdentifier = "CategoryCell"
+    var favoritesManager: FavoritesManager
     private let cellHeight: CGFloat = 100
     private let cellInsets: CGFloat = 20
     private var collectionView: UICollectionView?
     
-    init(viewModel: EventsCinemasViewModel, navigationController: UINavigationController? = nil) {
+    init(viewModel: EventsCinemasViewModel, favoritesManager: FavoritesManager, navigationController: UINavigationController? = nil) {
         self.viewModel = viewModel
+        self.favoritesManager = favoritesManager
         self.navigationController = navigationController
         super.init()
-        favoritesManager.addObserver(self)
+        self.favoritesManager.addObserver(self)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
