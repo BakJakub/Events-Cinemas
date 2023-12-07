@@ -7,15 +7,17 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
     weak var eventsCinemasDelegate: EventsCinemasSelectedDelegate?
     weak var navigationController: UINavigationController?
     private var viewModel: EventsCinemasViewModel
+    var favoritesManager = FavoritesManager()
     private let cellIdentifier = "CategoryCell"
     private let cellHeight: CGFloat = 100
     private let cellInsets: CGFloat = 20
-    private var collectionView: UICollectionView? // Referencja do kolekcji
+    private var collectionView: UICollectionView?
     
     init(viewModel: EventsCinemasViewModel, navigationController: UINavigationController? = nil) {
         self.viewModel = viewModel
         self.navigationController = navigationController
         super.init()
+        favoritesManager.addObserver(self)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -28,14 +30,8 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
         }
         
         let category = viewModel.categories[indexPath.item]
-        let favoritesManager = FavoritesManager()
         let cellViewModel = EventsCellViewModel(category: category, favoritesManager: favoritesManager)
         cell.viewModel = cellViewModel
-        cell.favoriteButton.tag = indexPath.item
-        cell.favoriteButton.isSelected = cellViewModel.isFavorite
-        
-        cell.favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped(_:)), for: .touchUpInside)
-        
         return cell
     }
     
@@ -52,13 +48,11 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
     func setCollectionViewReference(_ collectionView: UICollectionView) {
         self.collectionView = collectionView
     }
-    
-    @objc func favoriteButtonTapped(_ sender: UIButton) {
-        guard let cell = sender.superview?.superview as? EventsCollectionViewCell,
-              let indexPath = collectionView?.indexPath(for: cell),
-              let viewModel = cell.viewModel else { return }
+}
 
-        viewModel.toggleFavorite()
-        sender.isSelected = viewModel.isFavorite
+extension CollectionViewManager: FavoritesManagerObserver {
+    
+    func favoritesDidChange() {
+        collectionView?.reloadData()
     }
 }

@@ -3,7 +3,7 @@
 import UIKit
 
 class MovieDetailViewController: UIViewController {
-    
+ 
     private var viewModel: MovieDetailViewModel
     private var movieDetailView: MovieDetailView!
     var coordinator: Coordinator?
@@ -29,7 +29,7 @@ class MovieDetailViewController: UIViewController {
         navigationItem.leftBarButtonItem = backButton
         
         loadData()
-       // setupFavoriteButton()
+        setupFavoriteButton()
     }
     
     @objc func backButtonTapped() {
@@ -61,20 +61,20 @@ class MovieDetailViewController: UIViewController {
     }
     
     
-//    private func setupFavoriteButton() {
-//        let favoriteButton = UIBarButtonItem(image: UIImage(systemName: "star"), style: .plain, target: self, action: #selector(favoriteButtonTapped))
-//        navigationItem.rightBarButtonItem = favoriteButton
-//        updateFavoriteButtonState()
-//    }
-//
-//    @objc private func favoriteButtonTapped() {
-//        viewModel.toggleFavorite()
-//        updateFavoriteButtonState()
-//    }
-//
-//    private func updateFavoriteButtonState() {
-//        let isFavorite = viewModel.isMovieFavorite()
-//        let imageName = isFavorite ? "star.fill" : "star"
-//        navigationItem.rightBarButtonItem?.image = UIImage(systemName: imageName)
-//    }
+    private func setupFavoriteButton() {
+        guard let isFavorite = viewModel.isFavorite else { return }
+        let favoriteButton = UIBarButtonItem(image: UIImage(systemName: isFavorite ? "star.fill" : "star"), style: .plain, target: self, action: #selector(favoriteButtonTapped))
+        navigationItem.rightBarButtonItem = favoriteButton
+    }
+
+    @objc private func favoriteButtonTapped() {
+        viewModel.toggleFavorite()
+        updateFavoriteButtonState()
+    }
+
+    private func updateFavoriteButtonState() {
+        guard let isFavorite = viewModel.isFavorite else { return }
+        let imageName = isFavorite ? "star.fill" : "star"
+        navigationItem.rightBarButtonItem?.image = UIImage(systemName: imageName)
+    }
 }

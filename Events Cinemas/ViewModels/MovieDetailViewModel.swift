@@ -5,36 +5,40 @@ import UIKit
 class MovieDetailViewModel {
     
     var isLoading = false
+    var isFavorite: Bool?
     private(set) var data: MovieDetailResultModel
     private let movieManager: MovieManagerApiRequest
+    var favoritesManager = FavoritesManager()
+    
     
     init(data: MovieDetailResultModel, movieManager: MovieManagerApiRequest = MovieManagerApiRequest()) {
         self.data = data
         self.movieManager = movieManager
         self.fetchMovies(movieId: data.id) {_ in}
+        self.isFavorite = favoritesManager.isMovieFavorite(movieId: data.id)
     }
     
     func fetchDetailMovies(movieId: Int, completion: @escaping (Bool) -> Void) {
-          guard !isLoading else { return }
-          isLoading = true
-          
-          fetchMovies(movieId: movieId) { [weak self] result in
-              defer { self?.isLoading = false }
-              
-              switch result {
-              case .success(let movies):
-                  if let firstMovie = movies.first {
-                      self?.data = firstMovie
-                      completion(true)
-                  } else {
-                      completion(false)
-                  }
-                  
-              case .serverError(_), .networkError(_):
-                  completion(false)
-              }
-          }
-      }
+        guard !isLoading else { return }
+        isLoading = true
+        
+        fetchMovies(movieId: movieId) { [weak self] result in
+            defer { self?.isLoading = false }
+            
+            switch result {
+            case .success(let movies):
+                if let firstMovie = movies.first {
+                    self?.data = firstMovie
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+                
+            case .serverError(_), .networkError(_):
+                completion(false)
+            }
+        }
+    }
     
     
     func fetchMovies(movieId: Int, completion: @escaping (Result<[MovieDetailResultModel]>) -> Void) {
@@ -64,13 +68,11 @@ class MovieDetailViewModel {
         }
     }
     
-//    func toggleFavorite() {
-//        let movieId = data.id
-//        FavoritesManager.shared.toggleFavorite(movieId: movieId)
-//    }
-//
-//    func isMovieFavorite() -> Bool {
-//        let movieId = data.id
-//        return FavoritesManager.shared.isMovieFavorite(movieId: movieId)
-//    }
+    func toggleFavorite() {
+        if var currentFavorite = isFavorite {
+            currentFavorite.toggle()
+            isFavorite = currentFavorite
+            favoritesManager.toggleFavorite(movieId: data.id, isFavourite: currentFavorite)
+        }
+    }
 }

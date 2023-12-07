@@ -46,7 +46,7 @@ class EventsCollectionViewCell: UICollectionViewCell {
         favoriteButton.tintColor = .yellow
         favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
     }
-
+    
     private func setupCell() {
         layer.cornerRadius = 10
         backgroundColor = UIColor.gray.withAlphaComponent(0.5)

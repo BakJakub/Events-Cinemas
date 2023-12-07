@@ -19,7 +19,7 @@ struct FavoritesManager {
         observers.remove(observer)
     }
 
-    private func notifyObservers() {
+    internal func notifyObservers() {
         for observer in observers.allObjects {
             if let observer = observer as? FavoritesManagerObserver {
                 observer.favoritesDidChange()
@@ -44,8 +44,6 @@ struct FavoritesManager {
         
         if let updatedFavorites = userDefaults.array(forKey: favoritesKey) as? [Int], updatedFavorites == favorites {
             notifyObservers()
-        } else {
-            print("Problem save data")
         }
     }
 
