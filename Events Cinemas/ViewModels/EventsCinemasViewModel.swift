@@ -10,13 +10,12 @@ class EventsCinemasViewModel {
     
     var categories: [MovieDetailResultModel] = []
     weak var delegate: EventsCinemasDelegate?
-    private let movieManager: MovieManagerApiRequest
-//    private let favoriteKey = "FavoriteMovies"
+    private let movieManager: MovieService
   
     private var currentPage = 0
     var isFetching = false
     
-    init(movieManager: MovieManagerApiRequest = MovieManagerApiRequest()) {
+    init(movieManager: MovieService = MovieService()) {
         self.movieManager = movieManager
     }
     
@@ -30,14 +29,14 @@ class EventsCinemasViewModel {
     
     func toggleFavoriteStatus(at index: Int) {
         guard var category = getFilteredCategory(at: index) else { return }
-        category.toggleFavorite() // Wywołuje funkcję toggleFavorite na wybranej kategorii
-        categories[index] = category // Zapisuje zaktualizowaną kategorię z powrotem do tablicy
+        category.toggleFavorite()
+        categories[index] = category
         delegate?.categoriesFetched()
     }
     
     func isFavorite(at index: Int) -> Bool {
         let category = getFilteredCategory(at: index)
-        return category?.isFavorite ?? false // Zwraca stan ulubionego, jeśli istnieje, w przeciwnym razie zwraca false
+        return category?.isFavorite ?? false
     }
     
     func fetchNextPage() {

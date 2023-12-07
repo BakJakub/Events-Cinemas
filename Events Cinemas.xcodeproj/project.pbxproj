@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8C03E3952B1FDCA200967B90 /* MovieManagerApiRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C03E3942B1FDCA200967B90 /* MovieManagerApiRequest.swift */; };
+		8C03E3952B1FDCA200967B90 /* MovieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C03E3942B1FDCA200967B90 /* MovieService.swift */; };
 		8C03E3972B1FE10E00967B90 /* MovieDetailResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C03E3962B1FE10E00967B90 /* MovieDetailResultModel.swift */; };
 		8C03E39A2B1FE8FE00967B90 /* MovieDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C03E3992B1FE8FE00967B90 /* MovieDetailView.swift */; };
 		8C03E39F2B1FF2A200967B90 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 8C03E39E2B1FF2A200967B90 /* README.md */; };
@@ -56,7 +56,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		8C03E3942B1FDCA200967B90 /* MovieManagerApiRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieManagerApiRequest.swift; sourceTree = "<group>"; };
+		8C03E3942B1FDCA200967B90 /* MovieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieService.swift; sourceTree = "<group>"; };
 		8C03E3962B1FE10E00967B90 /* MovieDetailResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailResultModel.swift; sourceTree = "<group>"; };
 		8C03E3992B1FE8FE00967B90 /* MovieDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailView.swift; sourceTree = "<group>"; };
 		8C03E39E2B1FF2A200967B90 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -245,7 +245,7 @@
 				8C8940822B1E62960025B797 /* APIClient.swift */,
 				8C89407A2B1E5F0B0025B797 /* Endpoint.swift */,
 				8C89407E2B1E61390025B797 /* ErrorResponse.swift */,
-				8C03E3942B1FDCA200967B90 /* MovieManagerApiRequest.swift */,
+				8C03E3942B1FDCA200967B90 /* MovieService.swift */,
 				8C8940802B1E61520025B797 /* ResultResponse.swift */,
 			);
 			path = Networking;
@@ -403,7 +403,7 @@
 				8C89405E2B1DF73E0025B797 /* EventsCinemasController.swift in Sources */,
 				8C89406B2B1E00B20025B797 /* SceneDelegate.swift in Sources */,
 				8C03E3972B1FE10E00967B90 /* MovieDetailResultModel.swift in Sources */,
-				8C03E3952B1FDCA200967B90 /* MovieManagerApiRequest.swift in Sources */,
+				8C03E3952B1FDCA200967B90 /* MovieService.swift in Sources */,
 				8C8940672B1DFB980025B797 /* EventsCellViewModel.swift in Sources */,
 				8C03E39A2B1FE8FE00967B90 /* MovieDetailView.swift in Sources */,
 				8C6D07662B20E1B700AE76C3 /* FavoritesManager.swift in Sources */,

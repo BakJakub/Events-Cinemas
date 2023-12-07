@@ -2,7 +2,15 @@
 
 import UIKit
 
-struct MovieManagerApiRequest {
+protocol MovieServiceProtocol {
+    func fetchNowPlayingMovies(page: Int, completion: @escaping (Result<MovieResultModel>) -> Void)
+    func fetchSearchMovies(page: Int, searchText: String, completion: @escaping (Result<MovieResultModel>) -> Void)
+    func fetchDetailMovie(movieId: Int, completion: @escaping (Result<MovieDetailResultModel>) -> Void)
+    func buildLinkImage(data: MovieDetailResultModel, completion: @escaping (URL?) -> Void)
+    func fetchImage(withURL imageURL: URL, completion: @escaping (UIImage?) -> Void)
+}
+
+struct MovieService: MovieServiceProtocol {
     
     private let apiClient: APIClient
     

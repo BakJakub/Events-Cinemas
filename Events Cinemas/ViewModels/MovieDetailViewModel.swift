@@ -7,10 +7,10 @@ class MovieDetailViewModel {
     var isLoading = false
     var isFavorite: Bool?
     private(set) var data: MovieDetailResultModel
-    private let movieManager: MovieManagerApiRequest
+    private let movieManager: MovieService
     var favoritesManager = FavoritesManager()
     
-    init(data: MovieDetailResultModel, movieManager: MovieManagerApiRequest = MovieManagerApiRequest()) {
+    init(data: MovieDetailResultModel, movieManager: MovieService = MovieService()) {
         self.data = data
         self.movieManager = movieManager
         self.fetchMovies(movieId: data.id) {_ in}
