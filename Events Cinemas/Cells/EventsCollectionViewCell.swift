@@ -6,7 +6,7 @@ class EventsCollectionViewCell: UICollectionViewCell {
     
     private let categoryImageView = UIImageView()
     private let nameLabel = UILabel()
-    private let favoriteButton = UIButton(type: .custom)
+    let favoriteButton = UIButton(type: .custom)
 
     var viewModel: EventsCellViewModelProtocol? {
         didSet {
@@ -46,7 +46,7 @@ class EventsCollectionViewCell: UICollectionViewCell {
         favoriteButton.tintColor = .yellow
         favoriteButton.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
     }
-
+    
     private func setupCell() {
         layer.cornerRadius = 10
         backgroundColor = UIColor.gray.withAlphaComponent(0.5)
@@ -69,4 +69,5 @@ class EventsCollectionViewCell: UICollectionViewCell {
         super.layoutSubviews()
         categoryImageView.frame = contentView.bounds
     }
+
 }

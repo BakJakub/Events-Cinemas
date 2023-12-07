@@ -7,35 +7,30 @@ protocol SearchControllerManagerDelegate: AnyObject {
 }
 
 protocol SearchBarTextDelegate: AnyObject {
-    func didChangeSearchTextValue(_ searchText: String)
+    func didChangeActiveStatus(_ active: Bool)
 }
 
-class SearchControllerManager<T>: NSObject, UISearchBarDelegate, UITextFieldDelegate {
+class SearchControllerManager: NSObject, UISearchBarDelegate {
     
     weak var delegate: SearchControllerManagerDelegate?
-    weak var autocompleteViewController: AutocompleteViewController?
     weak var delegateSearchBarText: SearchBarTextDelegate?
-    
-    func setupSearchController(with searchBar: UISearchBar, autocompleteViewController: AutocompleteViewController) {
+
+    func setupSearchController(with searchBar: UISearchBar) {
         searchBar.delegate = self
-        searchBar.searchTextField.delegate = self
         searchBar.placeholder = "Search Movies"
-        self.autocompleteViewController = autocompleteViewController
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        delegate?.didChangeSearchText(searchText)
-    }
-    
-    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        guard autocompleteViewController != nil else { return false }
-        return true
-    }
-    
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if let text = textField.text, text.isEmpty {
-            delegateSearchBarText?.didChangeSearchTextValue(text)
-        }
-        return true
-    }
+         delegate?.didChangeSearchText(searchText)
+     }
+     
+     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+         delegateSearchBarText?.didChangeActiveStatus(true)
+         return true
+     }
+     
+     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+         searchBar.resignFirstResponder()
+         delegateSearchBarText?.didChangeActiveStatus(false)
+     }
 }

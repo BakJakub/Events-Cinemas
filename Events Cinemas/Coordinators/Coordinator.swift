@@ -10,7 +10,11 @@ class Coordinator {
     }
 
     func pushMovieDetail(data: MovieDetailResultModel) {
-        let movieDetailViewController = MovieDetailViewController(data: data)
+        let movieDetailViewController = MovieDetailViewController(data: data, coordinator: self)
         navigationController.pushViewController(movieDetailViewController, animated: true)
+    }
+    
+    func popToPreviousViewController() {
+        navigationController.popViewController(animated: true)
     }
 }

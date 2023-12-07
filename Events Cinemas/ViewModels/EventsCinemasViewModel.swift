@@ -2,20 +2,20 @@
 
 import Foundation
 
-protocol EventCinemasDelegate: AnyObject {
+protocol EventsCinemasDelegate: AnyObject {
     func categoriesFetched()
 }
 
-class EventCinemasViewModel {
+class EventsCinemasViewModel {
     
     var categories: [MovieDetailResultModel] = []
-    weak var delegate: EventCinemasDelegate?
-    private let movieManager: MovieManagerApiRequest
-    private let favoriteKey = "FavoriteMovies"
+    weak var delegate: EventsCinemasDelegate?
+    private let movieManager: MovieService
+  
     private var currentPage = 0
     var isFetching = false
     
-    init(movieManager: MovieManagerApiRequest = MovieManagerApiRequest()) {
+    init(movieManager: MovieService = MovieService()) {
         self.movieManager = movieManager
     }
     
@@ -28,23 +28,15 @@ class EventCinemasViewModel {
     }
     
     func toggleFavoriteStatus(at index: Int) {
-        guard let category = getFilteredCategory(at: index) else { return }
-        var favoriteMovies = UserDefaults.standard.array(forKey: favoriteKey) as? [String] ?? []
-        
-        if let index = favoriteMovies.firstIndex(of: category.title) {
-            favoriteMovies.remove(at: index)
-        } else {
-            favoriteMovies.append(category.title)
-        }
-        
-        UserDefaults.standard.set(favoriteMovies, forKey: favoriteKey)
+        guard var category = getFilteredCategory(at: index) else { return }
+        category.toggleFavorite()
+        categories[index] = category
         delegate?.categoriesFetched()
     }
     
     func isFavorite(at index: Int) -> Bool {
-        guard let category = getFilteredCategory(at: index) else { return false }
-        let favoriteMovies = UserDefaults.standard.array(forKey: favoriteKey) as? [String] ?? []
-        return favoriteMovies.contains(category.title)
+        let category = getFilteredCategory(at: index)
+        return category?.isFavorite ?? false
     }
     
     func fetchNextPage() {

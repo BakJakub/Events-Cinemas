@@ -6,7 +6,7 @@ protocol AutocompleteViewModelDelegate: AnyObject {
 
 class AutocompleteViewModel {
     
-    private let movieManager: MovieManagerApiRequest
+    private let movieManager: MovieService
     weak var delegate: AutocompleteViewModelDelegate?
     private(set) var filteredCategories: [MovieDetailResultModel] = []
     private var currentPage = 1
@@ -15,7 +15,7 @@ class AutocompleteViewModel {
     var numberOfResults: Int { return filteredCategories.count }
     var lastSearchedText = ""
     
-    init(movieManager: MovieManagerApiRequest = MovieManagerApiRequest()) {
+    init(movieManager: MovieService = MovieService()) {
         self.movieManager = movieManager
     }
     

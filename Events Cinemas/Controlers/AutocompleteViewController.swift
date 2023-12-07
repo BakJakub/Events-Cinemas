@@ -5,7 +5,7 @@ import UIKit
 class AutocompleteViewController: UITableViewController, AutocompleteViewModelDelegate {
     
     var viewModel = AutocompleteViewModel()
-    weak var eventCinemaDelegate: EventCinemaSelectedDelegate?
+    weak var eventsCinemasDelegate: EventsCinemasSelectedDelegate?
     var currentSearchText: String = "" { didSet { viewModel.updateSearchText(currentSearchText) } }
     
     func autocompleteResultsUpdated() {
@@ -20,16 +20,13 @@ class AutocompleteViewController: UITableViewController, AutocompleteViewModelDe
         viewModel.delegate = self
     }
     
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.numberOfResults
+        return max(viewModel.numberOfResults, 1)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        if let result = viewModel.result(at: indexPath.row) {
-            cell.textLabel?.text = result.title
-        }
+        cell.textLabel?.text = viewModel.numberOfResults == 0 ? "Wprowadź tekst" : viewModel.result(at: indexPath.row)?.title
         return cell
     }
     
@@ -43,16 +40,13 @@ class AutocompleteViewController: UITableViewController, AutocompleteViewModelDe
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard viewModel.numberOfResults > 0 else { return }
         if let selectedMovie = viewModel.result(at: indexPath.row) {
-            self.eventCinemaDelegate?.didSelectCategory(selectedMovie)
+            self.eventsCinemasDelegate?.didSelectCategory(selectedMovie)
         }
     }
     
     private func setupView() {
-        
-        navigationController?.navigationBar.tintColor = .white
-        navigationController?.navigationBar.backgroundColor = .purple
-        navigationController?.navigationBar.barTintColor = .purple
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         
         if let navigationBarHeight = navigationController?.navigationBar.bounds.height {

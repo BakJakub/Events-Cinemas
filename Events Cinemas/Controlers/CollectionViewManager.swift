@@ -4,17 +4,19 @@ import UIKit
 
 class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    weak var eventCinemaDelegate: EventCinemaSelectedDelegate?
-    weak var navigationController: UINavigationController?
-    private var viewModel: EventCinemasViewModel
+    weak var eventsCinemasDelegate: EventsCinemasSelectedDelegate?
+    private var viewModel: EventsCinemasViewModel
     private let cellIdentifier = "CategoryCell"
+    var favoritesManager: FavoritesManager
     private let cellHeight: CGFloat = 100
     private let cellInsets: CGFloat = 20
-
-    init(viewModel: EventCinemasViewModel, navigationController: UINavigationController? = nil) {
+    private var collectionView: UICollectionView?
+    
+    init(viewModel: EventsCinemasViewModel, favoritesManager: FavoritesManager, navigationController: UINavigationController? = nil) {
         self.viewModel = viewModel
-        self.navigationController = navigationController
+        self.favoritesManager = favoritesManager
         super.init()
+        self.favoritesManager.addObserver(self)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -27,8 +29,8 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
         }
         
         let category = viewModel.categories[indexPath.item]
-        cell.viewModel = EventsCellViewModel(category: category)
-        
+        let cellViewModel = EventsCellViewModel(category: category, favoritesManager: favoritesManager)
+        cell.viewModel = cellViewModel
         return cell
     }
     
@@ -39,7 +41,17 @@ class CollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedCategory = viewModel.categories[indexPath.item]
-        eventCinemaDelegate?.didSelectCategory(selectedCategory)
+        eventsCinemasDelegate?.didSelectCategory(selectedCategory)
+    }
+    
+    func setCollectionViewReference(_ collectionView: UICollectionView) {
+        self.collectionView = collectionView
     }
 }
 
+extension CollectionViewManager: FavoritesManagerObserver {
+    
+    func favoritesDidChange() {
+        collectionView?.reloadData()
+    }
+}
